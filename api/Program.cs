@@ -63,6 +63,32 @@ app.MapGet("/leaderboard", () =>
     return Results.Ok("Top 10 players in descending order of score - to be implemented");
 });
 
+static async Task SaveGamesAsync(List<Game> games, string filePath)
+{
+    var jsonString = JsonSerializer.Serialize(games);
+    await File.WriteAllTextAsync(filePath, jsonString);
+}
+
+static async Task<List<Game>> LoadGamesAsync(string filePath)
+{
+    if (!File.Exists(filePath)) return new List<Game>();
+    var jsonString = await File.ReadAllTextAsync(filePath);
+    return JsonSerializer.Deserialize<List<Game>>(jsonString) ?? new List<Game>();
+}
+
+static async Task SaveLeaderboardAsync(List<LeaderboardEntry> leaderboardEntries, string filePath)
+{
+    var jsonString = JsonSerializer.Serialize(leaderboardEntries);
+    await File.WriteAllTextAsync(filePath, jsonString);
+}
+
+static async Task<List<LeaderboardEntry>> LoadLeaderboardAsync(string filePath)
+{
+    if (!File.Exists(filePath)) return new List<LeaderboardEntry>();
+    var jsonString = await File.ReadAllTextAsync(filePath);
+    return JsonSerializer.Deserialize<List<LeaderboardEntry>>(jsonString) ?? new List<LeaderboardEntry>();
+}
+
 app.Run();
 
 // Models
@@ -71,69 +97,3 @@ public record Game(Guid Id, string PlayerHandle, string Name, int Turns, TimeSpa
 public record Card(int Position, bool IsFlipped, bool IsMatched);
 
 public record LeaderboardEntry(DateTime DateTimePlayed, string PlayerHandle, int Score, int Turns, TimeSpan TimeTaken);
-
-public class DataStore
-{
-    private const string GamesFileName = "games.json";
-    private const string LeaderboardFileName = "leaderboard.json";
-    private List<Game> games = new List<Game>();
-    private List<LeaderboardEntry> leaderboardEntries = new List<LeaderboardEntry>();
-
-    public DataStore()
-    {
-        LoadData();
-    }
-
-    public void SaveGame(Game game)
-    {
-        games.Add(game);
-        SaveData();
-    }
-
-    public IEnumerable<Game> GetGamesByHandle(string handle)
-    {
-        return games.Where(g => g.PlayerHandle == handle)
-                    .OrderByDescending(g => g.SaveDate)
-                    .Take(5);
-    }
-
-    public Game GetGameById(Guid gameId)
-    {
-        return games.FirstOrDefault(g => g.Id == gameId);
-    }
-
-    public void SaveLeaderboardEntry(LeaderboardEntry entry)
-    {
-        leaderboardEntries.Add(entry);
-        SaveData();
-    }
-
-    public IEnumerable<LeaderboardEntry> GetTopPlayers(int count)
-    {
-        return leaderboardEntries.OrderByDescending(l => l.Score).Take(count);
-    }
-
-    private void SaveData()
-    {
-        var gamesJson = JsonSerializer.Serialize(games);
-        File.WriteAllText(GamesFileName, gamesJson);
-
-        var leaderboardJson = JsonSerializer.Serialize(leaderboardEntries);
-        File.WriteAllText(LeaderboardFileName, leaderboardJson);
-    }
-
-    private void LoadData()
-    {
-        if (File.Exists(GamesFileName))
-        {
-            var gamesJson = File.ReadAllText(GamesFileName);
-            games = JsonSerializer.Deserialize<List<Game>>(gamesJson) ?? new List<Game>();
-        }
-
-        if (File.Exists(LeaderboardFileName))
-        {
-            var leaderboardJson = File.ReadAllText(LeaderboardFileName);
-            leaderboardEntries = JsonSerializer.Deserialize<List<LeaderboardEntry>>(leaderboardJson) ?? new List<LeaderboardEntry>();
-        }
-    }
-}
