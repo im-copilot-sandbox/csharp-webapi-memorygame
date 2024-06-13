@@ -31,16 +31,16 @@ app.MapGet("/", () =>
 // Modify the POST /game endpoint to save game information to a JSON file
 app.MapPost("/game", async ([FromBody] Game game) =>
 {
-    var games = await LoadData<List<Game>>(gamesFilePath) ?? new List<Game>();
+    var games = await LoadGamesAsync(gamesFilePath) ?? new List<Game>();
     games.Add(game);
-    await SaveData(gamesFilePath, games);
+    await SaveGamesAsync(games, gamesFilePath);
     return Results.Ok();
 });
 
 // Modify the GET /games/{handle} endpoint to retrieve games from a JSON file
 app.MapGet("/games/{handle}", async (string handle) =>
 {
-    var games = await LoadData<List<Game>>(gamesFilePath) ?? new List<Game>();
+    var games = await LoadGamesAsync(gamesFilePath) ?? new List<Game>();
     var filteredGames = games.Where(g => g.PlayerHandle == handle)
                              .OrderByDescending(g => g.SaveDate)
                              .Take(5);
@@ -50,32 +50,44 @@ app.MapGet("/games/{handle}", async (string handle) =>
 // Modify the POST /leaderboard endpoint to save leaderboard entries to a JSON file
 app.MapPost("/leaderboard", async ([FromBody] LeaderboardEntry entry) =>
 {
-    var leaderboard = await LoadData<List<LeaderboardEntry>>(leaderboardFilePath) ?? new List<LeaderboardEntry>();
+    var leaderboard = await LoadLeaderboardAsync(leaderboardFilePath) ?? new List<LeaderboardEntry>();
     leaderboard.Add(entry);
-    await SaveData(leaderboardFilePath, leaderboard);
+    await SaveLeaderboardAsync(leaderboard, leaderboardFilePath);
     return Results.Ok();
 });
 
 // Modify the GET /leaderboard endpoint to retrieve leaderboard entries from a JSON file
 app.MapGet("/leaderboard", async () =>
 {
-    var leaderboard = await LoadData<List<LeaderboardEntry>>(leaderboardFilePath) ?? new List<LeaderboardEntry>();
+    var leaderboard = await LoadLeaderboardAsync(leaderboardFilePath) ?? new List<LeaderboardEntry>();
     var topPlayers = leaderboard.OrderByDescending(l => l.Score).Take(10);
     return Results.Ok(topPlayers);
 });
 
-// Utility methods for loading and saving data
-async Task<T?> LoadData<T>(string filePath) where T : class
+static async Task SaveGamesAsync(List<Game> games, string filePath)
 {
-    if (!File.Exists(filePath)) return null;
-    var jsonData = await File.ReadAllTextAsync(filePath);
-    return JsonSerializer.Deserialize<T>(jsonData);
+    var jsonString = JsonSerializer.Serialize(games);
+    await File.WriteAllTextAsync(filePath, jsonString);
 }
 
-async Task SaveData<T>(string filePath, T data)
+static async Task<List<Game>> LoadGamesAsync(string filePath)
 {
-    var jsonData = JsonSerializer.Serialize(data, new JsonSerializerOptions { WriteIndented = true });
-    await File.WriteAllTextAsync(filePath, jsonData);
+    if (!File.Exists(filePath)) return new List<Game>();
+    var jsonString = await File.ReadAllTextAsync(filePath);
+    return JsonSerializer.Deserialize<List<Game>>(jsonString) ?? new List<Game>();
+}
+
+static async Task SaveLeaderboardAsync(List<LeaderboardEntry> leaderboardEntries, string filePath)
+{
+    var jsonString = JsonSerializer.Serialize(leaderboardEntries);
+    await File.WriteAllTextAsync(filePath, jsonString);
+}
+
+static async Task<List<LeaderboardEntry>> LoadLeaderboardAsync(string filePath)
+{
+    if (!File.Exists(filePath)) return new List<LeaderboardEntry>();
+    var jsonString = await File.ReadAllTextAsync(filePath);
+    return JsonSerializer.Deserialize<List<LeaderboardEntry>>(jsonString) ?? new List<LeaderboardEntry>();
 }
 
 app.Run();
@@ -85,4 +97,4 @@ public record Game(Guid Id, string PlayerHandle, string Handle, int TurnsTaken, 
     
 public record Card(string CardType, string State);
 
-public record LeaderboardEntry(DateTime DateTimePlayed, string Handle, int Score);
+public record LeaderboardEntry(DateTime DateTimePlayed, string PlayerHandle, int Score, int Turns, TimeSpan TimeTaken);
