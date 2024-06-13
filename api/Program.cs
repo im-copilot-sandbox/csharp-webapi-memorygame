@@ -17,123 +17,72 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+// Define file paths
+const string gamesFilePath = "games.json";
+const string leaderboardFilePath = "leaderboard.json";
+
 // Get / - Retrieve a greeting
 app.MapGet("/", () =>
 {
     return Results.Ok("Welcome to the Memory Game API");
 });
 
-// GET /games/handle - Retrieve the games a player has played with their scores
-app.MapGet("/games/{handle}", (string handle) =>
+
+// Modify the POST /game endpoint to save game information to a JSON file
+app.MapPost("/game", async ([FromBody] Game game) =>
 {
-    // Implement logic to retrieve the last 5 saved games by the player, sorted by save date in descending order
-
-    return Results.Ok($"Games played by player with handle: {handle} - to be implemented");
-});
-
-// POST /game - Save game information
-app.MapPost("/game", ([FromBody] Game game) =>
-{
-    // Implement logic to save a game
-
+    var games = await LoadData<List<Game>>(gamesFilePath) ?? new List<Game>();
+    games.Add(game);
+    await SaveData(gamesFilePath, games);
     return Results.Ok();
 });
 
-// GET /game/{gameId} - Retrieve information about a specific game
-app.MapGet("/game/{gameId}", (Guid gameId) =>
+// Modify the GET /games/{handle} endpoint to retrieve games from a JSON file
+app.MapGet("/games/{handle}", async (string handle) =>
 {
-    // Implement the logic to retrieve game information by gameId
-
-    return Results.Ok($"Game information for game with ID: {gameId} - to be implemented");
+    var games = await LoadData<List<Game>>(gamesFilePath) ?? new List<Game>();
+    var filteredGames = games.Where(g => g.PlayerHandle == handle)
+                             .OrderByDescending(g => g.SaveDate)
+                             .Take(5);
+    return Results.Ok(filteredGames);
 });
 
-// POST /leaderboard - Save leaderboard entry
-app.MapPost("/leaderboard", ([FromBody] LeaderboardEntry entry) =>
+// Modify the POST /leaderboard endpoint to save leaderboard entries to a JSON file
+app.MapPost("/leaderboard", async ([FromBody] LeaderboardEntry entry) =>
 {
-    // Implement logic to save a leaderboard entry
-
+    var leaderboard = await LoadData<List<LeaderboardEntry>>(leaderboardFilePath) ?? new List<LeaderboardEntry>();
+    leaderboard.Add(entry);
+    await SaveData(leaderboardFilePath, leaderboard);
     return Results.Ok();
 });
 
-// GET /leaderboard - Retrieve top 10 players in score descending order
-app.MapGet("/leaderboard", () =>
+// Modify the GET /leaderboard endpoint to retrieve leaderboard entries from a JSON file
+app.MapGet("/leaderboard", async () =>
 {
-    // Logic to retrieve top 10 players
-
-    return Results.Ok("Top 10 players in descending order of score - to be implemented");
+    var leaderboard = await LoadData<List<LeaderboardEntry>>(leaderboardFilePath) ?? new List<LeaderboardEntry>();
+    var topPlayers = leaderboard.OrderByDescending(l => l.Score).Take(10);
+    return Results.Ok(topPlayers);
 });
+
+// Utility methods for loading and saving data
+async Task<T?> LoadData<T>(string filePath) where T : class
+{
+    if (!File.Exists(filePath)) return null;
+    var jsonData = await File.ReadAllTextAsync(filePath);
+    return JsonSerializer.Deserialize<T>(jsonData);
+}
+
+async Task SaveData<T>(string filePath, T data)
+{
+    var jsonData = JsonSerializer.Serialize(data, new JsonSerializerOptions { WriteIndented = true });
+    await File.WriteAllTextAsync(filePath, jsonData);
+}
 
 app.Run();
 
 // Models
-public record Game(Guid Id, string PlayerHandle, string Name, int Turns, TimeSpan TimeTaken, TimeSpan TimeLeft, List<Card> Cards, DateTime SaveDate);
+public record Game(Guid Id, string PlayerHandle, string Handle, int TurnsTaken, TimeSpan TimeTaken, TimeSpan TimeLeft, List<Card> Cards, DateTime SaveDate);
     
-public record Card(int Position, bool IsFlipped, bool IsMatched);
+public record Card(string CardType, string State);
 
-public record LeaderboardEntry(DateTime DateTimePlayed, string PlayerHandle, int Score, int Turns, TimeSpan TimeTaken);
-
-public class DataStore
-{
-    private const string GamesFileName = "games.json";
-    private const string LeaderboardFileName = "leaderboard.json";
-    private List<Game> games = new List<Game>();
-    private List<LeaderboardEntry> leaderboardEntries = new List<LeaderboardEntry>();
-
-    public DataStore()
-    {
-        LoadData();
-    }
-
-    public void SaveGame(Game game)
-    {
-        games.Add(game);
-        SaveData();
-    }
-
-    public IEnumerable<Game> GetGamesByHandle(string handle)
-    {
-        return games.Where(g => g.PlayerHandle == handle)
-                    .OrderByDescending(g => g.SaveDate)
-                    .Take(5);
-    }
-
-    public Game GetGameById(Guid gameId)
-    {
-        return games.FirstOrDefault(g => g.Id == gameId);
-    }
-
-    public void SaveLeaderboardEntry(LeaderboardEntry entry)
-    {
-        leaderboardEntries.Add(entry);
-        SaveData();
-    }
-
-    public IEnumerable<LeaderboardEntry> GetTopPlayers(int count)
-    {
-        return leaderboardEntries.OrderByDescending(l => l.Score).Take(count);
-    }
-
-    private void SaveData()
-    {
-        var gamesJson = JsonSerializer.Serialize(games);
-        File.WriteAllText(GamesFileName, gamesJson);
-
-        var leaderboardJson = JsonSerializer.Serialize(leaderboardEntries);
-        File.WriteAllText(LeaderboardFileName, leaderboardJson);
-    }
-
-    private void LoadData()
-    {
-        if (File.Exists(GamesFileName))
-        {
-            var gamesJson = File.ReadAllText(GamesFileName);
-            games = JsonSerializer.Deserialize<List<Game>>(gamesJson) ?? new List<Game>();
-        }
-
-        if (File.Exists(LeaderboardFileName))
-        {
-            var leaderboardJson = File.ReadAllText(LeaderboardFileName);
-            leaderboardEntries = JsonSerializer.Deserialize<List<LeaderboardEntry>>(leaderboardJson) ?? new List<LeaderboardEntry>();
-        }
-    }
-}
+public record LeaderboardEntry(DateTime DateTimePlayed, string Handle, int Score);
