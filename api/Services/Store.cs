@@ -1,7 +1,7 @@
 using System.Text.Json;
 using api.Models;
 
-namespace api.Data
+namespace api.Services
 {
     public class Store
     {
@@ -17,6 +17,7 @@ namespace api.Data
             var jsonString = await File.ReadAllTextAsync(filePath);
             return JsonSerializer.Deserialize<List<Leaderboard>>(jsonString) ?? new List<Leaderboard>();
         }
+        
         public static async Task SaveGamesAsync(List<Game> games, string filePath)
         {
             var jsonString = JsonSerializer.Serialize(games);

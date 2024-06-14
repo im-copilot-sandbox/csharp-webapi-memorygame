@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using api.Models;
-using api.Data;
+using api.Services;
 
 namespace api.Routes
 {
