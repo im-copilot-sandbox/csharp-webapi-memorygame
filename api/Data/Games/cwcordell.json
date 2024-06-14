@@ -1,0 +1,84 @@
+[
+    {
+        "PlayerHandle": "cwcordell",
+        "TurnsTaken": 10,
+        "TimeTaken": 89,
+        "TimeLeft": 301,
+        "Cards": [
+            {
+                "CardType": "Blue",
+                "State": "hidden"
+            },
+            {
+                "CardType": "Orange",
+                "State": "hidden"
+            },
+            {
+                "CardType": "Red",
+                "State": "matched"
+            },
+            {
+                "CardType": "Orange",
+                "State": "hidden"
+            },
+            {
+                "CardType": "Green",
+                "State": "flipped"
+            },
+            {
+                "CardType": "Blue",
+                "State": "hidden"
+            },
+            {
+                "CardType": "Red",
+                "State": "matched"
+            },
+            {
+                "CardType": "Green",
+                "State": "hidden"
+            }
+        ],
+        "LastPlayedOn": "2024-06-14T19:10:27.011Z"
+    },
+    {
+        "PlayerHandle": "cwcordell",
+        "TurnsTaken": 10,
+        "TimeTaken": 89,
+        "TimeLeft": 301,
+        "Cards": [
+            {
+                "CardType": "Blue",
+                "State": "hidden"
+            },
+            {
+                "CardType": "Orange",
+                "State": "hidden"
+            },
+            {
+                "CardType": "Red",
+                "State": "matched"
+            },
+            {
+                "CardType": "Orange",
+                "State": "hidden"
+            },
+            {
+                "CardType": "Green",
+                "State": "flipped"
+            },
+            {
+                "CardType": "Blue",
+                "State": "hidden"
+            },
+            {
+                "CardType": "Red",
+                "State": "matched"
+            },
+            {
+                "CardType": "Green",
+                "State": "hidden"
+            }
+        ],
+        "LastPlayedOn": "2024-06-14T19:10:29.011Z"
+    }
+]
