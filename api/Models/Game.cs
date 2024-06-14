@@ -4,7 +4,7 @@ namespace api.Models
     public record Game
     {
         // The player's handle
-        public required string PlayerHandle { get; init; }
+        public required string Handle { get; init; }
 
         // The number of turns taken in the game
         public int TurnsTaken { get; init; }
@@ -14,11 +14,5 @@ namespace api.Models
 
         // Indicates whether the game has been completed
         public bool GameCompleted { get; init; }
-
-        // The list of cards in the game
-        public required List<Card> Cards { get; init; }
-
-        // The date when the game was last saved
-        public DateTime LastPlayedOn { get; init; }
     }
 }
