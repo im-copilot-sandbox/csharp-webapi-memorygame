@@ -9,16 +9,16 @@ namespace api.Models
         // The number of turns taken in the game
         public int TurnsTaken { get; init; }
 
-        // The time taken thus far in the game 
-        public TimeSpan TimeTaken { get; init; }
+        // The time taken thus far in the game in seconds
+        public int TimeTaken { get; init; }
 
-        // The time left in the game
-        public TimeSpan TimeLeft { get; init; }
+        // The time left in the game in seconds
+        public int TimeLeft { get; init; }
 
         // The list of cards in the game
         public required List<Card> Cards { get; init; }
 
         // The date when the game was last saved
-        public DateTime SaveDate { get; init; }
+        public DateTime LastPlayedOn { get; init; }
     }
 }
