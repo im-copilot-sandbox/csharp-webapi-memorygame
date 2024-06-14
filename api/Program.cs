@@ -5,7 +5,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddSingleton(new api.Data.Store());
+builder.Services.AddSingleton(new api.Services.Store());
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

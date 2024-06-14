@@ -1,7 +1,7 @@
 using System.Text.Json;
 using api.Models;
 
-namespace api.Data
+namespace api.Services
 {
     public class Store
     {
