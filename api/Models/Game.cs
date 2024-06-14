@@ -12,8 +12,8 @@ namespace api.Models
         // The time taken thus far in the game in seconds
         public int TimeTaken { get; init; }
 
-        // The time left in the game in seconds
-        public int TimeLeft { get; init; }
+        // Indicates whether the game has been completed
+        public bool GameCompleted { get; init; }
 
         // The list of cards in the game
         public required List<Card> Cards { get; init; }
