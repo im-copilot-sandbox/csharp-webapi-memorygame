@@ -1,13 +1,11 @@
-using System.Text.Json;
-using Microsoft.AspNetCore.Mvc;
+using api.Routes;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
+builder.Services.AddSingleton(new api.Data.Store());
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -17,83 +15,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-// Get / - Retrieve a greeting
-app.MapGet("/", () =>
-{
-    return Results.Ok("Welcome to the Memory Game API");
-});
-
-// GET /games/handle - Retrieve the games a player has played with their scores
-app.MapGet("/games/{handle}", (string handle) =>
-{
-    // Implement logic to retrieve the last 5 saved games by the player, sorted by save date in descending order
-
-    return Results.Ok($"Games played by player with handle: {handle} - to be implemented");
-});
-
-// POST /game - Save game information
-app.MapPost("/game", ([FromBody] Game game) =>
-{
-    // Implement logic to save a game
-
-    return Results.Ok();
-});
-
-// GET /game/{gameId} - Retrieve information about a specific game
-app.MapGet("/game/{gameId}", (Guid gameId) =>
-{
-    // Implement the logic to retrieve game information by gameId
-
-    return Results.Ok($"Game information for game with ID: {gameId} - to be implemented");
-});
-
-// POST /leaderboard - Save leaderboard entry
-app.MapPost("/leaderboard", ([FromBody] LeaderboardEntry entry) =>
-{
-    // Implement logic to save a leaderboard entry
-
-    return Results.Ok();
-});
-
-// GET /leaderboard - Retrieve top 10 players in score descending order
-app.MapGet("/leaderboard", () =>
-{
-    // Logic to retrieve top 10 players
-
-    return Results.Ok("Top 10 players in descending order of score - to be implemented");
-});
-
-static async Task SaveGamesAsync(List<Game> games, string filePath)
-{
-    var jsonString = JsonSerializer.Serialize(games);
-    await File.WriteAllTextAsync(filePath, jsonString);
-}
-
-static async Task<List<Game>> LoadGamesAsync(string filePath)
-{
-    if (!File.Exists(filePath)) return new List<Game>();
-    var jsonString = await File.ReadAllTextAsync(filePath);
-    return JsonSerializer.Deserialize<List<Game>>(jsonString) ?? new List<Game>();
-}
-
-static async Task SaveLeaderboardAsync(List<LeaderboardEntry> leaderboardEntries, string filePath)
-{
-    var jsonString = JsonSerializer.Serialize(leaderboardEntries);
-    await File.WriteAllTextAsync(filePath, jsonString);
-}
-
-static async Task<List<LeaderboardEntry>> LoadLeaderboardAsync(string filePath)
-{
-    if (!File.Exists(filePath)) return new List<LeaderboardEntry>();
-    var jsonString = await File.ReadAllTextAsync(filePath);
-    return JsonSerializer.Deserialize<List<LeaderboardEntry>>(jsonString) ?? new List<LeaderboardEntry>();
-}
+GameEndpoints.MapGameEndpoints(app);
 
 app.Run();
-
-// Models
-public record Game(Guid Id, string PlayerHandle, string Name, int Turns, TimeSpan TimeTaken, TimeSpan TimeLeft, List<Card> Cards, DateTime SaveDate);
-    
-public record Card(int Position, bool IsFlipped, bool IsMatched);
-
-public record LeaderboardEntry(DateTime DateTimePlayed, string PlayerHandle, int Score, int Turns, TimeSpan TimeTaken);
