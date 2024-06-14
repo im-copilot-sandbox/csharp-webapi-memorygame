@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using api.Models;
+using api.Data;
 
 namespace api.Routes
 {
@@ -7,51 +8,43 @@ namespace api.Routes
     {
         public static void MapGameEndpoints(WebApplication app)
         {
-            // Get / - Retrieve a greeting
             app.MapGet("/greeting", () =>
             {
                 return Results.Ok("Welcome to the Memory Game API!");
             });
 
-            // POST /game - Save game information
-            app.MapPost("/game", ([FromBody] Game game) =>
+            app.MapPost("/game", async ([FromBody] Game game) =>
             {
-                // TODO: Save the following in a JSON file
-                // named with the player handle
-                // - name under the handle
-                // - # of turns
-                // - time taken
-                // - time left
-                // - number of cards and their position
-                // - which ones flipped vs. hidden
+                string filePath = $"./Data/Games/{game.PlayerHandle}.json";
+                var games = await Store.LoadGamesAsync(filePath);
+                games.Add(game);
+                await Store.SaveGamesAsync(games, filePath);
                 return Results.Ok();
             });
 
-            // GET /game/handle - Retrieve the last game a player has played
-            app.MapGet("/game/{handle}", (string handle) =>
+            app.MapGet("/game/{handle}", async (string handle) =>
             {
-                // TODO: Retrieve info about the game stored via POST /game    
-                return Results.Ok($"Games played by player with handle: {handle} - to be implemented");
+                string filePath = $"./Data/Games/{handle}.json";
+                var games = await Store.LoadGamesAsync(filePath);
+                var lastGame = games.OrderByDescending(g => g.LastPlayedOn).FirstOrDefault();
+                return lastGame != null ? Results.Ok(lastGame) : Results.NotFound($"No games found for player {handle}.");
             });
 
-            // POST /leaderboard - Save leaderboard entry
-            app.MapPost("/leaderboard", ([FromBody] Leaderboard entry) =>
+            app.MapPost("/leaderboard", async ([FromBody] Leaderboard entry) =>
             {
-                // TODO: Save the following
-                // - player handle
-                // - score
-                // - date/time last played 
+                string filePath = "./Data/Leaderboard.json";
+                var leaderboardEntries = await Store.LoadLeaderboardAsync(filePath);
+                leaderboardEntries.Add(entry);
+                await Store.SaveLeaderboardAsync(leaderboardEntries, filePath);
                 return Results.Ok();
             });
 
-            // GET /leaderboard - Retrieve top 10 players in score descending order
-            app.MapGet("/leaderboard", () =>
+            app.MapGet("/leaderboard", async () =>
             {
-                // TODO: Retrieve top 10 players in score desc order
-                // - player handle
-                // - score
-                // - date/time last played 
-                return Results.Ok("Top 10 players in descending order of score - to be implemented");
+                string filePath = "./Data/Leaderboard.json";
+                var leaderboardEntries = await Store.LoadLeaderboardAsync(filePath);
+                var topPlayers = leaderboardEntries.OrderByDescending(entry => entry.Score).Take(10);
+                return Results.Ok(topPlayers);
             });
         }
     }
