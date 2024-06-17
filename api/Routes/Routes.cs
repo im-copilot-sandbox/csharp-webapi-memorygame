@@ -15,12 +15,13 @@ namespace api.Routes
             });
 
             app.MapPost("/game", async ([FromBody] Game game) =>
-            {
-                if (game == null) return Results.BadRequest("Invalid game data.");
+{
+    if (game == null || string.IsNullOrEmpty(game.Handle) || game.Cards == null || game.Cards.Count == 0 || game.StartTime == default || game.EndTime == default)
+        return Results.BadRequest("Invalid or incomplete game data.");
 
-                await GameData.SaveGameAsync(game, game.Handle);
-                return Results.Ok($"Game data for {game.Handle} saved successfully.");
-            });
+    await GameData.SaveGameAsync(game, game.Handle);
+    return Results.Ok($"Game data for {game.Handle} saved successfully.");
+});
 
             app.MapGet("/game/{handle}", async (string handle) =>
             {
