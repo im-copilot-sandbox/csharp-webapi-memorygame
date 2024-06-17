@@ -24,7 +24,7 @@ It's recommended to perform all the commands via GitHub Chat vs. inline code. Th
 - Open the file `Routes/Routes.cs'.
 - Open the Copilot Chat and ask Copilot to help.
 
-    `NOTE` that after entering the `#file` text followed by the enter key, VSCode will display the dropdown to allow selection of the file. The file must be blue in the prompt, indicating that Copilot has the file reference like this.
+    `NOTE` that after entering the `#file` text followed by the enter key, VSCode will display the dropdown to allow selection of the file. The file must be blue in the prompt, indicating that Copilot has the file reference. Like this.
     ![File Selection Prompting Example](./images/file_selection_prompting_example.png)
 
     ```text
@@ -34,6 +34,7 @@ It's recommended to perform all the commands via GitHub Chat vs. inline code. Th
     <details>
     <summary>Output</summary>
     <p>
+
     ```cs
     using Microsoft.AspNetCore.Mvc;
     using api.Models;
@@ -89,8 +90,41 @@ It's recommended to perform all the commands via GitHub Chat vs. inline code. Th
         }
     }
     ```
+
 </p>
 </details>
 
 - In the browser, use Swagger to try the endpoints. The POST endpoints should generate JSON entries in the respective files under the `api/Data` directory.
 
+#### Step 2: Refactor the Game POST API
+
+The `game` POST endpoint uses the "handle" to save the game information, so let's make sure that the handle isn't empty.
+
+- Within the `Routes.cs` file, select the entire `/game` POST function. Like this.
+    ![File Selection Prompting Example](./images/select_game_post.png)
+
+- Within Copilot Chat, enter the following:
+
+```text
+In #selection, return bad request if the handle is not present.
+```
+
+`NOTE` that the `#selection` should be blue since it is a command.
+
+<details>
+<summary>Output</summary>
+<p>
+
+```cs
+app.MapPost("/game", async ([FromBody] Game game) =>
+{
+    if (game == null || string.IsNullOrWhiteSpace(game.Handle))
+    { return Results.BadRequest("Invalid game data or missing handle."); }
+
+    await GameData.SaveGameAsync(game, game.Handle);
+    return Results.Ok($"Game data for {game.Handle} saved successfully.");
+});
+```
+
+</p>
+</details>
