@@ -93,13 +93,13 @@ This example demonstrates how to test the "/greeting" endpoint. You would need t
 </p>
 </details>
 
-#### 2. Ask Copilot how to install xunit
+#### 2. Ask Copilot How to Install xUnit
 
 ```text
-How can xunit be installed?
+How can I configure xUnit in Visual Studio Code for running the tests?
 ```
 
-`NOTE` that xunit and xunit runner has already been installed for this lab.
+`NOTE` that the packages for testing have already been installed for this lab.
 
 <details>
 <summary>Output</summary>
@@ -130,5 +130,150 @@ After running these commands, your project will have xUnit installed, and you ca
 </p>
 </details>
 
+#### 3. Ask Copilot How to configure xUnit in VSCode
+
+```text
+How can I configure xUnit in Visual Studio Code for running the tests?
+```
+
+<details>
+<summary>Output</summary>
+<p>
+To configure xUnit in Visual Studio Code for running tests, follow these steps:
+
+1. **Install .NET Core SDK**: Ensure you have the .NET Core SDK installed on your machine. You can download it from the official .NET website.
+
+2. **Install C# Extension for VS Code**: If not already installed, install the C# extension by Microsoft from the Visual Studio Code Marketplace. This extension provides support for .NET Core development, including running and debugging tests.
+
+3. **Create or Update the Test Project**:
+   - If you haven't already, create a test project in your solution. You can do this by running the following command in the terminal:
+     ```shell
+     dotnet new xunit -n YourTestProjectName
+     ```
+   - Add a reference to the project you want to test:
+     ```shell
+     dotnet add YourTestProjectName reference Path/To/Your/Project
+     ```
+
+4. **Install xUnit and xUnit Runner**:
+   - Ensure your test project has the necessary xUnit and test runner packages. You can add them using the following commands:
+     ```shell
+     dotnet add package xunit
+     dotnet add package xunit.runner.visualstudio
+     ```
+   - Also, for .NET Core 3.1 or later, adding the `Microsoft.NET.Test.Sdk` package is recommended:
+     ```shell
+     dotnet add package Microsoft.NET.Test.Sdk
+     ```
+
+5. **Configure `launch.json` for Debugging**:
+   - Open the Run and Debug view in VS Code (`View` > `Run` or `Ctrl+Shift+D`).
+   - Create a `launch.json` file by clicking on create a launch.json file link.
+   - Select `.NET Core`.
+   - This automatically creates a configuration for running and debugging applications. Ensure there's a configuration for your test project.
+
+6. **Running Tests**:
+   - **Using the Terminal**: You can run your tests by executing the following command in the terminal:
+     ```shell
+     dotnet test
+     ```
+   - **Using Test Explorer UI**: For a GUI approach, you can install the `Test Explorer UI` extension along with the `.NET Core Test Explorer` extension from the VS Code Marketplace. These extensions provide a graphical interface for running and debugging tests.
+
+7. **Optional Settings**:
+   - You can configure test settings in your `.csproj` file or through a `runsettings` file for more advanced scenarios like code coverage.
+
+By following these steps, you should be able to run and debug xUnit tests in Visual Studio Code.
+</p>
+</details>
+
 #### 3. Ask Copilot How to Check Code Coverage
 
+#### 5. Generate Test Data
+
+Copilot can generate some sample data to test against.
+
+- Let's try generating a game for the "testhandle" user. Enter the following in the chat textbox.
+
+    ```text
+    Generate a sample game data file in the Data directory for handle "testHandle" using #file:Game.cs and #file:Card.cs as references. There should be 8 cards (4 pairs) and CardType is a random color. Randomize the card order. Pick two of them to be in the flipped state.
+    ```
+
+    <details>
+    <summary>Output</summary>
+    <p>
+
+    ```json
+    {
+    "Handle": "testHandle",
+    "TurnsTaken": 5,
+    "TimeTaken": 300,
+    "GameCompleted": false,
+    "Cards": [
+        {
+        "CardType": "red",
+        "State": "hidden"
+        },
+        {
+        "CardType": "blue",
+        "State": "flipped"
+        },
+        {
+        "CardType": "green",
+        "State": "hidden"
+        },
+        {
+        "CardType": "yellow",
+        "State": "hidden"
+        },
+        {
+        "CardType": "blue",
+        "State": "hidden"
+        },
+        {
+        "CardType": "red",
+        "State": "flipped"
+        },
+        {
+        "CardType": "yellow",
+        "State": "hidden"
+        },
+        {
+        "CardType": "green",
+        "State": "hidden"
+        }
+    ]
+    }
+    ```
+
+    </p>
+    </details>
+
+- Create the `Data/testhandle.json` file and paste the sample data.
+
+- Open or Create the `Data/leaderboard.json` file then ask Copilot to generate ten data entries.
+
+    ```text
+    Generate ten entries for sample data.
+    ```
+
+    <details>
+    <summary>Output</summary>
+    <p>
+
+    ```json
+    [
+    {"Handle":"arcadeMaster","Score":130,"DateTimePlayed":"2024-07-01T12:00:00.000Z"},
+    {"Handle":"quickDraw","Score":125,"DateTimePlayed":"2024-07-02T13:30:30.500Z"},
+    {"Handle":"strategyGuru","Score":135,"DateTimePlayed":"2024-07-03T14:45:45.678Z"},
+    {"Handle":"puzzleSolver","Score":140,"DateTimePlayed":"2024-07-04T15:15:15.915Z"},
+    {"Handle":"speedRunner","Score":145,"DateTimePlayed":"2024-07-05T16:25:25.250Z"},
+    {"Handle":"memoryKing","Score":150,"DateTimePlayed":"2024-07-06T17:35:35.350Z"},
+    {"Handle":"reactionAce","Score":155,"DateTimePlayed":"2024-07-07T18:45:45.455Z"},
+    {"Handle":"endurancePro","Score":160,"DateTimePlayed":"2024-07-08T19:55:55.555Z"},
+    {"Handle":"stealthNinja","Score":165,"DateTimePlayed":"2024-07-09T20:05:05.605Z"},
+    {"Handle":"challengeSeeker","Score":170,"DateTimePlayed":"2024-07-10T21:15:15.715Z"}
+    ]
+    ```
+
+    </p>
+    </details>
