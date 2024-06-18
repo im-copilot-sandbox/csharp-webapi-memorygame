@@ -109,7 +109,7 @@ The `game` POST endpoint uses the "handle" to save the game information, so let'
 In #selection, return bad request if the handle is not present.
 ```
 
-`NOTE` that the `#selection` should be blue since it is a command.
+`NOTE` that the `#selection` text should be blue since it is a command.
 
 <details>
 <summary>Output</summary>

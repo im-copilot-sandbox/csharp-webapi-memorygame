@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using api.Models;
 using api.Services;
-using System.Text.Json;
 
 namespace api.Routes
 {
