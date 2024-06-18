@@ -1,6 +1,7 @@
-using Microsoft.AspNetCore.Mvc.Testing;
+using System.Net;
 using System.Net.Http.Json;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Testing;
 using Api.Models;
 
 namespace Api.Tests
@@ -52,6 +53,26 @@ namespace Api.Tests
             var responseString = await response.Content.ReadAsStringAsync();
 
             Assert.Contains("saved successfully", responseString);
+        }
+
+        [Fact]
+        public async Task PostGame_WhenHandleIsEmpty_ReturnsBadRequest()
+        {
+            var client = _factory.CreateClient();
+            var game = new Game
+            {
+                Handle = "", // Empty handle to trigger BadRequest
+                Cards = new List<Card>
+        {
+            new Card { CardType = "number", State = "hidden" }
+        }
+            };
+
+            var response = await client.PostAsJsonAsync("/game", game);
+
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+            var responseString = await response.Content.ReadAsStringAsync();
+            Assert.Contains("Invalid game data or missing handle", responseString);
         }
 
         [Fact]
