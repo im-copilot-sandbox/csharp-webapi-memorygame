@@ -11,7 +11,7 @@
                 "${workspaceFolder}/Api.Tests/Api.Tests.csproj",
                 "/p:CollectCoverage=true",
                 "/p:CoverletOutputFormat=lcov",
-                "/p:CoverletOutput=./lcov.info"
+                "/p:CoverletOutput=../Coverage/lcov.info"
             ],
             "problemMatcher": "$msCompile",
             "group": {
