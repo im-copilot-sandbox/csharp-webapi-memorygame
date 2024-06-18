@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
-using api.Models;
-using api.Services;
+using Api.Models;
+using Api.Services;
 
-namespace api.Routes
+namespace Api.Routes
 {
     public static class GameEndpoints
     {

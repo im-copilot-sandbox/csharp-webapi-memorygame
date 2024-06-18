@@ -1,7 +1,7 @@
 using System.Text.Json;
-using api.Models;
+using Api.Models;
 
-namespace api.Services
+namespace Api.Services
 {
     public class GameData
     {

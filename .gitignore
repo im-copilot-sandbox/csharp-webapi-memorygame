@@ -398,4 +398,4 @@ FodyWeavers.xsd
 *.sln.iml
 
 # Local Development
-api/Data/*
+Api/Data/*

@@ -1,11 +1,11 @@
-using api.Routes;
+using Api.Routes;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddSingleton(new api.Services.GameData());
+builder.Services.AddSingleton(new Api.Services.GameData());
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
