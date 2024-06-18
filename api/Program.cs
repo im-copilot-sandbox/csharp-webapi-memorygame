@@ -18,3 +18,4 @@ if (app.Environment.IsDevelopment())
 GameEndpoints.MapGameEndpoints(app);
 
 app.Run();
+public partial class Program { }
