@@ -186,7 +186,70 @@ By following these steps, you should be able to run and debug xUnit tests in Vis
 </p>
 </details>
 
-#### 3. Ask Copilot How to Check Code Coverage
+#### 4. Run Tests and Check Code Coverage
+
+- Open the VS Code terminal and enter:
+    ```sh
+    dotnet test --collect:"XPlat Code Coverage"
+    ```
+    You should see something similar to this.
+
+    ![No Test Coverage](./images/test_with_no_test_coverage.png)
+  
+#### 5. Generate Test for the Greeting Endpoint
+
+- Open the `Api.Tests/RouteTests.cs` file.
+- Highlight the `GreetingEndpoint_RerurnsWelcome` function
+- Ask Copilot to generate the test case
+    ```text
+    #selection
+    ```
+
+    <details>
+    <summary>Output</summary>
+    <p>
+
+    ```csharp
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading.Tasks;
+    using Microsoft.AspNetCore.Mvc.Testing;
+    using Xunit;
+
+    namespace Api.Tests
+    {
+        public class GameEndpointsTests : IClassFixture<WebApplicationFactory<Api.Startup>>
+        {
+            private readonly WebApplicationFactory<Api.Startup> _factory;
+
+            public GameEndpointsTests(WebApplicationFactory<Api.Startup> factory)
+            {
+                _factory = factory;
+            }
+
+            [Fact]
+            public async Task Get_Greeting_ReturnsWelcomeMessage()
+            {
+                // Arrange
+                var client = _factory.CreateClient();
+
+                // Act
+                var response = await client.GetAsync("/greeting");
+                response.EnsureSuccessStatusCode();
+                var responseString = await response.Content.ReadAsStringAsync();
+
+                // Assert
+                Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+                Assert.Contains("Welcome to the Memory Game API!", responseString);
+            }
+
+            // Additional tests for other endpoints can follow a similar structure
+        }
+    }
+    ```
+
+</p>
+</details>
 
 #### 5. Generate Test Data
 
