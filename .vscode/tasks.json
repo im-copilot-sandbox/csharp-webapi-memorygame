@@ -5,7 +5,7 @@
             "label": "test",
             "dependsOn": [],
             "command": "dotnet",
-            "type": "process",
+            "type": "shell",
             "args": [
                 "test",
                 "${workspaceFolder}/Api.Tests/Api.Tests.csproj",

@@ -190,12 +190,23 @@ By following these steps, you should be able to run and debug xUnit tests in Vis
 
 - Open the VS Code terminal and enter:
     ```sh
-    dotnet test --collect:"XPlat Code Coverage"
+    dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=lcov /p:CoverletOutput=../Coverage/lcov.info
     ```
+    or open the command pallet in VSCode, enter/select `Tasks: Run Test Task`.
+
     You should see something similar to this.
 
     ![No Test Coverage](./images/test_with_no_test_coverage.png)
+
+- Open the `Api/Routes.cs` file to view the code coverage.
+    The VSCode extension `Coverage Gutters`, provides a visual indication of which lines of code have test coverage.
+
+    Covered lines have a green gutter while red indicates no coverage. You should see something like this.
+
+    ![Greeting Test Coverage](./images/test_one_showing_coverage_gutter.png) 
   
+    `NOTE` if you don't see the coverage gutter, try toggling the gutter on/off by clicking the `Watch` text on the status bar (where the text `50% Coverage` is in the image above).
+
 #### 5. Generate Test for the Greeting Endpoint
 
 - Open the `Api.Tests/RouteTests.cs` file.
@@ -251,7 +262,7 @@ By following these steps, you should be able to run and debug xUnit tests in Vis
 </p>
 </details>
 
-#### 5. Generate Test Data
+#### 6. Generate Test Data
 
 Copilot can generate some sample data to test against.
 
@@ -313,7 +324,7 @@ Copilot can generate some sample data to test against.
 
 - Create the `Data/testhandle.json` file and paste the sample data.
 
-- Open or Create the `Data/leaderboard.json` file then ask Copilot to generate ten data entries.
+- Open or create the `Data/leaderboard.json` file then ask Copilot to generate ten data entries.
 
     ```text
     Generate ten entries for sample data.
@@ -337,6 +348,86 @@ Copilot can generate some sample data to test against.
     {"Handle":"challengeSeeker","Score":170,"DateTimePlayed":"2024-07-10T21:15:15.715Z"}
     ]
     ```
+
+    </p>
+    </details>
+
+#### 7. Implement a Test for Get Game by Handle
+
+- Enter the following into the Copilot chat.
+    ```text
+    Implement the GetGameByHandle_ReturnsGame test case in #file:RouteTests.cs referencing the get game endpoint in the #file:Routes.cs file. Use the #file:Game.cs and #file:Card.cs classes. Test data already exists for the handle "testHandle".
+    ```
+   <details>
+    <summary>Output</summary>
+    <p>
+
+    ```csharp
+    [Fact]
+    public async Task GetGameByHandle_ReturnsGame()
+    {
+        // Arrange
+        var client = _factory.CreateClient();
+        var testHandle = "testHandle";
+
+        // Act
+        var response = await client.GetAsync($"/game/{testHandle}");
+        response.EnsureSuccessStatusCode();
+        var game = await response.Content.ReadFromJsonAsync<Game>();
+
+        // Assert
+        Assert.NotNull(game);
+        Assert.Equal(testHandle, game.Handle);
+        Assert.True(game.Cards.Any(), "Game should have at least one card.");
+        Assert.Contains(game.Cards, card => !string.IsNullOrWhiteSpace(card.CardType) && !string.IsNullOrWhiteSpace(card.State));
+    }
+    ```
+
+    </p>
+    </details>
+
+- Check the test coverage once again.
+
+#### 8. Implement the PostGame_ReturnSuccess Test Case
+- Enter the following into the Copilot chat.
+
+    ```text
+    Implement the PostGame_ReturnsSuccess test case in #file:RouteTests.cs for the post game endpoint in the #file:Routes.cs file. Use the #file:Game.cs and #file:Card.cs classes.
+    ```
+
+    <details>
+    <summary>Output</summary>
+    <p>
+
+        ```csharp
+        [Fact]
+        public async Task PostGame_ReturnsSuccess()
+        {
+            // Arrange
+            var client = _factory.CreateClient();
+            var newGame = new Game
+            {
+                Handle = "testGameHandle",
+                TurnsTaken = 5,
+                TimeTaken = 120,
+                GameCompleted = false,
+                Cards = new List<Card>
+                {
+                    new Card { CardType = "image", State = "hidden" },
+                    new Card { CardType = "color", State = "flipped" }
+                }
+            };
+
+            // Act
+            var response = await client.PostAsJsonAsync("/game", newGame);
+            response.EnsureSuccessStatusCode();
+            var responseString = await response.Content.ReadAsStringAsync();
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            Assert.Contains("Game data for testGameHandle saved successfully.", responseString);
+        } 
+        ```
 
     </p>
     </details>
