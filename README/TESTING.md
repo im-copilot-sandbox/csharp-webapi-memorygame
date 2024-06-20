@@ -198,22 +198,18 @@ By following these steps, you should be able to run and debug xUnit tests in Vis
 
     ![No Test Coverage](./images/test_with_no_test_coverage.png)
 
-- Open the `Api/Routes.cs` file to view the code coverage.
-    The VSCode extension `Coverage Gutters`, provides a visual indication of which lines of code have test coverage.
-
-    Covered lines have a green gutter while red indicates no coverage. You should see something like this.
-
-    ![Greeting Test Coverage](./images/test_one_showing_coverage_gutter.png) 
-  
-    `NOTE` if you don't see the coverage gutter, try toggling the gutter on/off by clicking the `Watch` text on the status bar (where the text `50% Coverage` is in the image above).
-
 #### 5. Generate Test for the Greeting Endpoint
 
 - Open the `Api.Tests/RouteTests.cs` file.
-- Highlight the `GreetingEndpoint_RerurnsWelcome` function
-- Ask Copilot to generate the test case
+
+- Select the `GreetingEndpoint_RerurnsWelcome` function.
+
+    ![Select GreetingEndpoint_ReturnsWelcome Test Case](./images/test_selection_GreetingEndPoint_ReturnsWelcome.png)
+
+- Ask Copilot to generate the test case.
+
     ```text
-    #selection
+    #selection implement test case referencing the #file:Routes.cs file.
     ```
 
     <details>
@@ -261,6 +257,23 @@ By following these steps, you should be able to run and debug xUnit tests in Vis
 
 </p>
 </details>
+
+- Once again, open the VS Code terminal and enter:
+
+    ```sh
+    dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=lcov /p:CoverletOutput=../Coverage/lcov.info
+    ```
+    or open the command pallet in VSCode, enter/select `Tasks: Run Test Task`.
+
+- Open the `Api/Routes.cs` file to view the code coverage.
+    The VSCode extension `Coverage Gutters`, provides a visual indication of which lines of code have test coverage.
+
+    Covered lines have a green gutter while red indicates no coverage. You should see something like this.
+
+    ![Greeting Test Coverage](./images/test_one_showing_coverage_gutter.png) 
+  
+    `NOTE` if you don't see the coverage gutter, try toggling the gutter on/off by clicking the `Watch` text on the status bar (where the text `50% Coverage` is in the image above).
+
 
 #### 6. Generate Test Data
 
@@ -431,3 +444,95 @@ Copilot can generate some sample data to test against.
 
     </p>
     </details>
+
+#### 9. Implement the Remaining Test Cases
+
+Copilot is capable of implementing more than one test case at a time.
+
+- Let's ask Copilot to create the reamining test cases.
+
+    ```text
+    Implement the remaining test cases in #file:RouteTests.cs referencing the endpoints in the #file:Routes.cs file. Use the #file:Leaderboard.cs #file:Game.cs and #file:Card.cs classes.
+    ```
+
+    <details>
+    <summary>Output</summary>
+    <p>
+
+        ```csharp
+        [Fact]
+        public async Task PostGame_WhenHandleIsEmpty_ReturnsBadRequest()
+        {
+            // Arrange
+            var client = _factory.CreateClient();
+            var newGame = new Game
+            {
+                Handle = "",
+                TurnsTaken = 3,
+                TimeTaken = 90,
+                GameCompleted = true,
+                Cards = new List<Card>
+                {
+                    new Card { CardType = "number", State = "hidden" }
+                }
+            };
+
+            // Act
+            var response = await client.PostAsJsonAsync("/game", newGame);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task PostLeaderboard_ReturnsSuccess()
+        {
+            // Arrange
+            var client = _factory.CreateClient();
+            var newEntry = new Leaderboard
+            {
+                Handle = "player123",
+                Score = 100,
+                DateTimePlayed = DateTime.UtcNow
+            };
+
+            // Act
+            var response = await client.PostAsJsonAsync("/leaderboard", newEntry);
+            response.EnsureSuccessStatusCode();
+            var responseString = await response.Content.ReadAsStringAsync();
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            Assert.Contains("Leaderboard entry for player123 saved successfully.", responseString);
+        }
+        
+        [Fact]
+        public async Task GetLeaderboard_ReturnsTopTenEntries()
+        {
+            // Arrange
+            var client = _factory.CreateClient();
+
+            // Act
+            var response = await client.GetAsync("/leaderboard");
+            response.EnsureSuccessStatusCode();
+            var leaderboardEntries = await response.Content.ReadFromJsonAsync<List<Leaderboard>>();
+
+            // Assert
+            Assert.NotNull(leaderboardEntries);
+            Assert.True(leaderboardEntries.Count <= 10, "Should return up to 10 leaderboard entries.");
+            Assert.True(leaderboardEntries.SequenceEqual(leaderboardEntries.OrderByDescending(entry => entry.Score)), "Entries should be ordered by score descending.");
+        }
+       ```
+    </p>
+    </details>
+
+
+- Run the tests once more.
+
+    ```sh
+    dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=lcov /p:CoverletOutput=../Coverage/lcov.info
+    ```
+   
+    Note that there is 100% coverage for the API endpoints.
+
+    ![Final Test Run](./images/test_final_showing_coverage_gutter.png) 
