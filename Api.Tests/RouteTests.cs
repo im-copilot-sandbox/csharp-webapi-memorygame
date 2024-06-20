@@ -18,7 +18,18 @@ namespace Api.Tests
         [Fact]
         public async Task GreetingEndpoint_ReturnsWelcome()
         {
-            // TODO: Implement the text case for the greeting endpoint in #file: Api/Routes/Routes.cs
+            // Arrange
+            var client = _factory.CreateClient();
+
+            // Act
+            var response = await client.GetAsync("/greeting");
+            response.EnsureSuccessStatusCode();
+            var responseString = await response.Content.ReadAsStringAsync();
+
+            // Assert
+            var expected = "Welcome to the Memory Game API!";
+            Console.WriteLine(responseString);
+            Assert.Equal(expected, responseString.Trim('"'));
         }
 
         [Fact]
