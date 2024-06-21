@@ -8,11 +8,13 @@ namespace Api.Routes
     {
         public static void MapGameEndpoints(WebApplication app)
         {
+            // Get / - Retrieve a greeting
             app.MapGet("/greeting", () =>
             {
                 return Results.Ok("Welcome to the Memory Game API!");
             });
-
+            
+            // POST /game - Save game information
             app.MapPost("/game", async ([FromBody] Game game) =>
             {
                 if (game == null || string.IsNullOrWhiteSpace(game.Handle))
@@ -22,6 +24,7 @@ namespace Api.Routes
                 return Results.Ok($"Game data for {game.Handle} saved successfully.");
             });
 
+            // GET /game/{handle} - Retrieve game information by handle
             app.MapGet("/game/{handle}", async (string handle) =>
             {
                 var game = await GameData.RetrieveGameAsync(handle);
@@ -30,6 +33,7 @@ namespace Api.Routes
                 return Results.Ok(game);
             });
 
+            // POST /leaderboard - Save leaderboard entry
             app.MapPost("/leaderboard", async ([FromBody] Leaderboard entry) =>
             {
                 if (entry == null) return Results.BadRequest("Invalid leaderboard entry.");
@@ -41,6 +45,7 @@ namespace Api.Routes
                 return Results.Ok($"Leaderboard entry for {entry.Handle} saved successfully.");
             });
 
+            // GET /leaderboard - Retrieve top 10 leaderboard entries
             app.MapGet("/leaderboard", async () =>
             {
                 var leaderboardEntries = await GameData.RetrieveLeaderboardAsync();
