@@ -7,10 +7,34 @@ namespace Api.Models
         public required string Handle { get; init; }
 
         // The number of turns taken in the game
-        public int TurnsTaken { get; init; }
+        private int _turnsTaken;
+        public int TurnsTaken
+        {
+            get => _turnsTaken;
+            init
+            {
+            if (value < 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(TurnsTaken), "Turns taken must be greater than or equal to 0.");
+            }
+            _turnsTaken = value;
+            }
+        }
 
         // The time taken thus far in the game in seconds
-        public int TimeTaken { get; init; }
+        private int _timeTaken;
+        public int TimeTaken
+        {
+            get => _timeTaken;
+            init
+            {
+            if (value < 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(TimeTaken), "Time taken must be greater than or equal to 0.");
+            }
+            _timeTaken = value;
+            }
+        }
 
         // Indicates whether the game has been completed
         public bool GameCompleted { get; init; }

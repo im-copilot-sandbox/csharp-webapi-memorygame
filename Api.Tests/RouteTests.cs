@@ -91,9 +91,9 @@ namespace Api.Tests
                 TimeTaken = 90,
                 GameCompleted = true,
                 Cards = new List<Card>
-        {
-            new Card { CardType = "number", State = "hidden" }
-        }
+                {
+                    new Card { CardType = "number", State = "hidden" }
+                }
             };
 
             // Act

@@ -7,9 +7,22 @@ namespace Api.Models
         public required string Handle { get; init; }
 
         // The score achieved by the player
-        public int Score { get; init; }
+        private int _score;
+
+        public int Score
+        {
+            get => _score;
+            init
+            {
+                if (value < 0)
+                {
+                    throw new ArgumentException("Score must be greater than or equal to 0.");
+                }
+                _score = value;
+            }
+        }
 
         // The date and time when the game was completed
-        public DateTime DateTimePlayed { get; init; }
+        public required DateTime DateTimePlayed { get; init; }
     }
 }
