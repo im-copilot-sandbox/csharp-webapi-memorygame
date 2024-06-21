@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Api.Models;
 using Api.Services;
 
-namespace Api.Routes
+namespace api.Routes
 {
     public static class GameEndpoints
     {
@@ -13,45 +13,46 @@ namespace Api.Routes
             {
                 return Results.Ok("Welcome to the Memory Game API!");
             });
-            
-            // POST /game - Save game information
-            app.MapPost("/game", async ([FromBody] Game game) =>
-            {
-                if (game == null || string.IsNullOrWhiteSpace(game.Handle))
-                    { return Results.BadRequest("Invalid game data or missing handle."); }
 
-                await GameData.SaveGameAsync(game, game.Handle);
-                return Results.Ok($"Game data for {game.Handle} saved successfully.");
+            // POST /game - Save game information
+            app.MapPost("/game", ([FromBody] Game game) =>
+            {
+                // TODO: Save the following in a JSON file
+                // named with the player handle
+                // - name under the handle
+                // - # of turns
+                // - time taken
+                // - time left
+                // - number of cards and their position
+                // - which ones flipped vs. hidden
+                return Results.Ok();
             });
 
-            // GET /game/{handle} - Retrieve game information by handle
-            app.MapGet("/game/{handle}", async (string handle) =>
+            // GET /game/handle - Retrieve the last game a player has played
+            app.MapGet("/game/{handle}", (string handle) =>
             {
-                var game = await GameData.RetrieveGameAsync(handle);
-                if (game == null) return Results.NotFound($"No game found for handle: {handle}");
-
-                return Results.Ok(game);
+                // TODO: Retrieve info about the game stored via POST /game    
+                return Results.Ok($"Games played by player with handle: {handle} - to be implemented");
             });
 
             // POST /leaderboard - Save leaderboard entry
-            app.MapPost("/leaderboard", async ([FromBody] Leaderboard entry) =>
+            app.MapPost("/leaderboard", ([FromBody] Leaderboard entry) =>
             {
-                if (entry == null) return Results.BadRequest("Invalid leaderboard entry.");
-
-                var leaderboardEntries = await GameData.RetrieveLeaderboardAsync();
-                leaderboardEntries.Add(entry);
-                await GameData.SaveLeaderboardEntryAsync(leaderboardEntries);
-
-                return Results.Ok($"Leaderboard entry for {entry.Handle} saved successfully.");
+                // TODO: Save the following
+                // - player handle
+                // - score
+                // - date/time last played 
+                return Results.Ok();
             });
 
-            // GET /leaderboard - Retrieve top 10 leaderboard entries
-            app.MapGet("/leaderboard", async () =>
+            // GET /leaderboard - Retrieve top 10 players in score descending order
+            app.MapGet("/leaderboard", () =>
             {
-                var leaderboardEntries = await GameData.RetrieveLeaderboardAsync();
-                var topTenEntries = leaderboardEntries.OrderByDescending(entry => entry.Score).Take(10);
-
-                return Results.Ok(topTenEntries);
+                // TODO: Retrieve top 10 players in score desc order
+                // - player handle
+                // - score
+                // - date/time last played 
+                return Results.Ok("Top 10 players in descending order of score - to be implemented");
             });
         }
     }
