@@ -1,5 +1,5 @@
 [
-        {"handle": "flipwizard", "score": 100},
-        {"handle": "memorymaven", "score": 200},
-        {"handle": "speedracer", "score": 300}
-]
+        {"Handle": "flipwizard", "Score": 100},
+        {"Handle": "memorymaven", "Score": 200},
+        {"Handle": "speedracer", "Score": 300}
+    ]

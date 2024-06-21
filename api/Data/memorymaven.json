@@ -1,12 +1,12 @@
 {
-    "handle": "memorymaven",
-    "turns_taken": 10,
-    "time_taken": 120,
-    "time_left": 180,
-    "cards": [
-        {"card_type": "type1", "state": "hidden"},
-        {"card_type": "type2", "state": "flipped"},
-        {"card_type": "type1", "state": "flipped"},
-        {"card_type": "type2", "state": "hidden"}
+    "Handle": "memorymaven",
+    "TurnsTaken": 10,
+    "TimeTaken": 120,
+    "TimeLeft": 180,
+    "Cards": [
+        {"CardType": "type1", "State": "hidden"},
+        {"CardType": "type2", "State": "flipped"},
+        {"CardType": "type1", "State": "flipped"},
+        {"CardType": "type2", "State": "hidden"}
     ]
 }

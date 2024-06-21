@@ -1,10 +1,44 @@
 {
-    "handle": "flipwizard",
-    "time_left": 180,
-    "cards": [
-        {"card_type": "type1", "state": "hidden"},
-        {"card_type": "type2", "state": "flipped"},
-        {"card_type": "type1", "state": "flipped"},
-        {"card_type": "type2", "state": "hidden"}
+    "Handle": "flipwizard",
+    "TurnsTaken": 17,
+    "TimeTaken": 180,
+    "GameCompleted": false,
+    "Cards": [
+        {
+            "CardType": "pair4",
+            "State": "hidden"
+        },
+        {
+            "CardType": "pair2",
+            "State": "hidden"
+        },
+        {
+            "CardType": "pair6",
+            "State": "hidden"
+        },
+        {
+            "CardType": "pair1",
+            "State": "flipped"
+        },
+        {
+            "CardType": "pair3",
+            "State": "hidden"
+        },
+        {
+            "CardType": "pair5",
+            "State": "hidden"
+        },
+        {
+            "CardType": "pair7",
+            "State": "hidden"
+        },
+        {
+            "CardType": "pair8",
+            "State": "hidden"
+        },
+        {
+            "CardType": "pair2",
+            "State": "hidden"
+        }
     ]
 }
