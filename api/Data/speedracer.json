@@ -1,0 +1,12 @@
+{
+    "Handle": "speedracer",
+    "TurnsTaken": 10,
+    "TimeTaken": 120,
+    "TimeLeft": 180,
+    "Cards": [
+        {"CardType": "type1", "State": "hidden"},
+        {"CardType": "type2", "State": "flipped"},
+        {"CardType": "type1", "State": "flipped"},
+        {"CardType": "type2", "State": "hidden"}
+    ]
+}

@@ -25,6 +25,7 @@ It's recommended to perform all the commands via GitHub Chat vs. inline code. Th
 - Open the Copilot Chat and ask Copilot to help.
 
     `NOTE` that after entering the `#file` text followed by the enter key, VSCode will display the dropdown to allow selection of the file. The file must be blue in the prompt, indicating that Copilot has the file reference. Like this.
+
     ![File Selection Prompting Example](./images/file_selection_prompting_example.png)
 
     ```text
