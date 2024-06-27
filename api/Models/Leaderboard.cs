@@ -1,4 +1,4 @@
-namespace api.Models
+namespace Api.Models
 {
     // Represents a leaderboard entry
     public record Leaderboard

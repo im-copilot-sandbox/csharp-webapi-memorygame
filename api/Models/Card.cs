@@ -1,4 +1,4 @@
-namespace api.Models
+namespace Api.Models
 {
     // Represents a card in the memory game.
     public class Card

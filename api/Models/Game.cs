@@ -1,4 +1,4 @@
-namespace api.Models
+namespace Api.Models
 {
     // Represents a game
     public record Game
@@ -14,5 +14,8 @@ namespace api.Models
 
         // Indicates whether the game has been completed
         public bool GameCompleted { get; init; }
+
+        // The cards in the game and their state
+        public required List<Card> Cards { get; init; }
     }
 }
