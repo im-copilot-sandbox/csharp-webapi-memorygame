@@ -46,6 +46,7 @@ Generated\ Files/
 
 # Test Coverage
 Coverage/*
+Api.Tests/coveragereport/*
 
 # NUnit
 *.VisualState.xml
@@ -402,3 +403,4 @@ FodyWeavers.xsd
 
 # Local Development
 .local
+

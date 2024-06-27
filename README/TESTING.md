@@ -188,7 +188,7 @@ By following these steps, you should be able to run and debug xUnit tests in Vis
 
 #### 4. Run Tests and Check Code Coverage
 
-- Open the VS Code terminal and enter:
+- Open the VS Code terminal to the repository root and enter:
     ```sh
     dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=lcov /p:CoverletOutput=../Coverage/lcov.info
     ```
@@ -536,3 +536,19 @@ Copilot is capable of implementing more than one test case at a time.
     Note that there is 100% coverage for the API endpoints.
 
     ![Final Test Run](./images/test_final_showing_coverage_gutter.png) 
+
+- Run the Report Generator.
+
+    From the command line at the repository root, run the following.
+
+    ```sh
+    reportgenerator -reports:Coverage/lcov.info -targetdir:coveragereport -reporttypes:Html
+    ```
+
+- Optionally, if you'd like to see a GUI report:
+    
+    Open your file explorer then right click on the index.html file within `Api.Tests/coveragereport` and select open with the browser.
+
+    You should see something like this.
+
+   <img src="./images/coveragereport_final.png" alt="Final Coverage Report" width="1200" />
