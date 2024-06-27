@@ -7,13 +7,13 @@ namespace api.Routes
     {
         public static void MapGameEndpoints(WebApplication app)
         {
-            // Get / - Retrieve a greeting
+            // Route to fetch data from the JSON file
             app.MapGet("/greeting", () =>
             {
-                return Results.Ok("Welcome to the Memory Game API!");
+                return Results.Ok("Hello, World!");
             });
 
-            // POST /game - Save game information
+            // POST /game
             app.MapPost("/game", ([FromBody] Game game) =>
             {
                 // TODO: Save the following in a JSON file
@@ -27,31 +27,31 @@ namespace api.Routes
                 return Results.Ok();
             });
 
-            // GET /game/handle - Retrieve the last game a player has played
+            // GET /game/handle
             app.MapGet("/game/{handle}", (string handle) =>
             {
-                // TODO: Retrieve info about the game stored via POST /game    
-                return Results.Ok($"Games played by player with handle: {handle} - to be implemented");
+                // TODO: Retrieve info about the game stored via POST /game
+                return Results.Ok();
             });
 
-            // POST /leaderboard - Save leaderboard entry
+            // POST /leaderboard
             app.MapPost("/leaderboard", ([FromBody] Leaderboard entry) =>
             {
                 // TODO: Save the following
                 // - player handle
                 // - score
-                // - date/time last played 
+                // - date/time last played
                 return Results.Ok();
             });
 
-            // GET /leaderboard - Retrieve top 10 players in score descending order
+            // GET /leaderboard
             app.MapGet("/leaderboard", () =>
             {
                 // TODO: Retrieve top 10 players in score desc order
                 // - player handle
                 // - score
-                // - date/time last played 
-                return Results.Ok("Top 10 players in descending order of score - to be implemented");
+                // - date/time last played
+                return Results.Ok();
             });
         }
     }
