@@ -12,7 +12,6 @@ namespace app.Models
         // The time taken thus far in the game in seconds
         public int TimeTaken { get; init; }
 
-        // Indicates whether the game has been completed
-        public bool GameCompleted { get; init; }
+        public List<Card> Cards { get; init; } = new();
     }
 }
