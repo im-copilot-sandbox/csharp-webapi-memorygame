@@ -1,5 +1,5 @@
 using System.Text.Json;
-using api.Models;
+using app.Models;
 
 /*
 all JSON files should be stored in the data directory.
@@ -29,7 +29,7 @@ handle.json
 }
 */
 
-namespace api.Services
+namespace app.Services
 {
     public class GameData
     {

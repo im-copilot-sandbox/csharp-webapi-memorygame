@@ -1,4 +1,4 @@
-namespace api.Models
+namespace app.Models
 {
     // Represents a game
     public record Game

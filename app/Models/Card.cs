@@ -1,10 +1,10 @@
-namespace api.Models
+namespace app.Models
 {
     // Represents a card in the memory game.
     public class Card
     {
         // Gets or sets the type of the card, i.e. image, color, number, etc.
-        public required string CardType { get; set; } 
+        public required string CardType { get; set; }
 
         // Gets or sets a value indicating whether the card is hidden or flipped.
         public required string State { get; set; }
