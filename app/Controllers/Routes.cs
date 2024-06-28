@@ -29,6 +29,12 @@ namespace app.Controllers
                 return BadRequest("Game handle is required.");
             }
 
+            // Ensure the number of cards is even
+            if (game.Cards == null || game.Cards.Count % 2 != 0)
+            {
+                return BadRequest("The number of cards must be even.");
+            }
+
             foreach (var card in game.Cards)
             {
                 if (string.IsNullOrEmpty(card.Type))
