@@ -17,47 +17,55 @@ namespace app.Controllers
 
         // POST /game
         [HttpPost("game")]
-        public ActionResult<string> PostGame([FromBody] Game game)
+        public async Task<IActionResult> PostGame([FromBody] Game game)
         {
-            // TODO: Save the following in a JSON file
-            // named with the player handle
-            // - name under the handle
-            // - # of turns
-            // - time taken
-            // - time left
-            // - number of cards and their position
-            // - which ones flipped vs. hidden
+            if (game == null || string.IsNullOrEmpty(game.Handle))
+            {
+                return BadRequest("Invalid game data.");
+            }
+
+            await GameData.SaveGameAsync(game, game.Handle);
             return Ok();
         }
 
         // GET /game/handle
         [HttpGet("game/{handle}")]
-        public ActionResult<string> GetGame(string handle)
+        public async Task<IActionResult> GetGame(string handle)
         {
-            // TODO: Retrieve info about the game stored via POST /game
-            return Ok();
+            var game = await GameData.RetrieveGameAsync(handle);
+            if (game == null)
+            {
+                return NotFound($"Game data for player {handle} not found.");
+            }
+            return Ok(game);
         }
 
         // POST /leaderboard
         [HttpPost("leaderboard")]
-        public ActionResult<string> PostLeaderboard([FromBody] Leaderboard entry)
+        public async Task<IActionResult> PostLeaderboard([FromBody] LeaderboardEntry entry)
         {
-            // TODO: Save the following
-            // - player handle
-            // - score
-            // - date/time last played
-            return Ok();
+            if (entry == null || string.IsNullOrEmpty(entry.Handle) || entry.Score <= 0)
+            {
+                return BadRequest("Invalid leaderboard entry.");
+            }
+
+            await GameData.SaveLeaderboardEntryAsync(entry.Handle, entry.Score);
+            return Ok("Leaderboard entry saved successfully.");
+        }
+
+        public class LeaderboardEntry
+        {
+            public string Handle { get; set; }
+            public int Score { get; set; }
         }
 
         // GET /leaderboard
         [HttpGet("leaderboard")]
-        public ActionResult<string> GetLeaderboard()
+        public async Task<ActionResult<List<Leaderboard>>> GetLeaderboard()
         {
-            // TODO: Retrieve top 10 players in score desc order
-            // - player handle
-            // - score
-            // - date/time last played
-            return Ok();
+            var leaderboard = await GameData.RetrieveLeaderboardAsync();
+            var topTen = leaderboard.OrderByDescending(l => l.Score).Take(10).ToList();
+            return Ok(topTen);
         }
     }
 }
