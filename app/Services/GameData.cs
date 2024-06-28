@@ -71,7 +71,7 @@ namespace app.Services
                 {
                     Handle = handle,
                     Score = score,
-                    DateTimePlayed = DateTime.UtcNow
+                    LastPlayed = DateTime.UtcNow
                 });
             }
             else
@@ -80,7 +80,7 @@ namespace app.Services
                 {
                     Handle = handle,
                     Score = score,
-                    DateTimePlayed = DateTime.UtcNow
+                    LastPlayed = DateTime.UtcNow
                 });
             }
 
