@@ -4,6 +4,8 @@ import com.example.app_java.Models.Game;
 import com.example.app_java.Models.Leaderboard;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -23,6 +25,7 @@ public class GameDataService {
 
     public GameDataService() throws IOException {
         Files.createDirectories(dataDirectory);
+        objectMapper.registerModule(new JavaTimeModule());
     }
 
     public void saveGameAsync(Game game, String handle) throws IOException {
