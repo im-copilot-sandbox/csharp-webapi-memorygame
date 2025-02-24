@@ -1,63 +1,123 @@
 using Microsoft.AspNetCore.Mvc;
 using app.Models;
 using app.Services;
+using System.Text.Json;
+using System.IO;
+using System.Linq;
 
 namespace app.Controllers
 {
     [ApiController]
-    [Route("")]
+    [Route("api")]
     public class RoutesController : ControllerBase
     {
+        private readonly GameData _gameData;
+
+        public RoutesController()
+        {
+            _gameData = new GameData();
+        }
+
         // Route to fetch data from the JSON file
         [HttpGet("greeting")]
         public ActionResult<string> Greeting()
         {
-            return Ok("Hello, World!");
+            return Ok("Hello, siva!");
         }
 
-        // POST /game
+        // POST /api/game
         [HttpPost("game")]
         public ActionResult<string> PostGame([FromBody] Game game)
         {
-            // TODO: Save the following in a JSON file
-            // named with the player handle
-            // - name under the handle
-            // - # of turns
-            // - time taken
-            // - time left
-            // - number of cards and their position
-            // - which ones flipped vs. hidden
-            return Ok();
+            if (game == null || string.IsNullOrWhiteSpace(game.Handle))
+            {
+                return BadRequest("Invalid game data.");
+            }
+
+            try
+            {
+                _gameData.SaveGame(game);
+                return Ok("Game data saved successfully.");
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
-        // GET /game/handle
+        // GET /api/game/{handle}
         [HttpGet("game/{handle}")]
-        public ActionResult<string> GetGame(string handle)
+        public ActionResult<Game> GetGame(string handle)
         {
-            // TODO: Retrieve info about the game stored via POST /game
-            return Ok();
+            if (string.IsNullOrWhiteSpace(handle))
+            {
+                return BadRequest("Handle is required.");
+            }
+
+            try
+            {
+                var game = _gameData.GetGame(handle);
+
+                if (game == null)
+                {
+                    return NotFound("Game data not found.");
+                }
+
+                return Ok(game);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
-        // POST /leaderboard
+        // POST /api/leaderboard
         [HttpPost("leaderboard")]
         public ActionResult<string> PostLeaderboard([FromBody] Leaderboard entry)
         {
-            // TODO: Save the following
-            // - player handle
-            // - score
-            // - date/time last played
-            return Ok();
+            if (entry == null || string.IsNullOrWhiteSpace(entry.Handle))
+            {
+                return BadRequest("Invalid leaderboard entry.");
+            }
+
+            try
+            {
+                var leaderboardEntries = _gameData.GetLeaderboardEntries() ?? new List<Leaderboard>();
+                leaderboardEntries.Add(entry);
+                _gameData.SaveLeaderboardEntries(leaderboardEntries);
+                return Ok("Leaderboard entry saved successfully.");
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
-        // GET /leaderboard
+        // GET /api/leaderboard
         [HttpGet("leaderboard")]
-        public ActionResult<string> GetLeaderboard()
+        public ActionResult<IEnumerable<Leaderboard>> GetLeaderboard()
         {
-            // TODO: Retrieve top 10 players in score desc order
-            // - player handle
-            // - score
-            // - date/time last played
-            return Ok();
+            try
+            {
+                var leaderboardEntries = _gameData.GetLeaderboardEntries();
+
+                if (leaderboardEntries == null || !leaderboardEntries.Any())
+                {
+                    return NotFound("No leaderboard entries found.");
+                }
+
+                // Order by score descending and take top 10
+                var topPlayers = leaderboardEntries
+                    .OrderByDescending(entry => entry.Score)
+                    .Take(10)
+                    .ToList();
+
+                return Ok(topPlayers);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }

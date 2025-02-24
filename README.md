@@ -1,104 +1,110 @@
-# Memory Game
+# Memory Game API
 
-Welcome to our Memory Game challenge! This is an application written with C#. We're excited to see how you can enhance it during the event.
+This is a Memory Game API built with ASP.NET Core. The API allows players to save and retrieve game data, as well as manage a leaderboard.
 
-## Challenge Objectives
+## Table of Contents
 
-The goal of this challenge is to build a memory game using GitHub Copilot in C# . The game is based on the classic card game where players need to match pairs of cards.
+- [Features](#features)
+- [Getting Started](#getting-started)
+- [Running the Tests](#running-the-tests)
+- [Generating Code Coverage Report](#generating-code-coverage-report)
+- [API Endpoints](#api-endpoints)
+- [Project Structure](#project-structure)
+- [Contributing](#contributing)
+- [License](#license)
 
-### Rules of the game
+## Features
 
-1. The game should have a grid of cards that are face down and randomly placed.
-2. When a player clicks on a card, it should flip over to reveal the image on the other side.
-3. The player should then click on another card to try to match the images.
-4. If the images match, the cards should stay face up.
-5. If the images do not match, the cards should flip back over.
-6. The game ends when all pairs of cards have been matched.
-
-The matching _images_ could also be numbers, words or symbols.
-
-To complete this challenge, you will need to implement the game logic and user interface that includes the required features listed below. You can also add any additional features you think would enhance the game.
-
-## Basic Requirements
-
-The game should have the following required features:
-
-- A grid of cards that are randomly placed and face down.
-- The ability to flip over cards to reveal the image on the other side.
-- Logic to check if the images on two cards match.
-- A way to keep track of the number of moves made by the player.
-- A way to keep track of the time taken to complete the game.
-- A scoring system based on the number of moves and time taken; less moves and time should result in a higher score.
-- A way to reset the game and start a new game.
-- A way to display the player's score in previous games.
-
-## Stretch Goals
-
-Some additional features you could add to enhance the game:
-
-- A timer to limit the time taken to complete the game.
-- A way to select the difficulty level of the game (e.g., number of cards, time limit).
-- A way to save the player's score and display a leaderboard.
-- A way to customize the cards with different images or themes including different game board backgrounds.
-- A way to add sound effects or animations to the game.
-- A way to add hints or power-ups to help the player complete the game. For example a hint button that reveals the location of a couple of cards one of which is the correct match at the expense of some time or random cards that add to or subtract from the remaining time.
-- A way to play the game with multiple players or against an AI opponent.
+- Save and retrieve game data
+- Manage a leaderboard
+- Input validation
+- Unit tests with xUnit
+- Code coverage with coverlet and ReportGenerator
 
 ## Getting Started
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
-
-To help you get started, we have provided a basic scafolding for the game. The repository contains all of the starter code. The pages directory contains the SplashScreen, GameScreen, and EndScreen pages and the Card component.
-
 ### Prerequisites
 
-You will need the following tools:
+- [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0)
+- [.NET 9 SDK](https://dotnet.microsoft.com/download/dotnet/9.0)
+- [Visual Studio 2022](https://visualstudio.microsoft.com/vs/)
 
-- [Visual Studio Code](https://code.visualstudio.com/download)
-- [DotNet Core](https://dotnet.microsoft.com/en-us/download)
-- [Git](https://git-scm.com/downloads)
+### Installation
 
-### Installing & Running
+1. Clone the repository:
+   git clone https://github.com/yourusername/memory-game-api.git cd memory-game-api
 
-1. Clone the repo:
+2. Restore the dependencies:
+   dotnet restore
 
-```bash
-git clone https://github.com/im-copilot-sandbox/csharp-webapi-memorygame.git
-```
 
-2. Navigate to the project directory:
+3. Build the project:
+   dotnet build
 
-```bash
-cd csharp-webapi-memorygame
-```
 
-3. Open the project in Visual Studio Code
+## Running the Tests
 
-```bash
-code .
-```
+To run the unit tests, use the following command:
+dotnet test
 
-4. Reopen the project in the DevContainer
+## Generating Code Coverage Report
 
-![Open DevContainer](.devcontainer/screenshot.png)
+To generate a code coverage report, follow these steps:
 
-5. Start the server:
+1. Run tests with code coverage:
+   dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:CoverletOutput=./TestResults/
 
-```bash
-dotnet watch
-```
+2. Generate the code coverage report:
+   reportgenerator -reports:./TestResults/coverage.opencover.xml -targetdir:./coverage-report
 
-## Using GitHub and GitHub Copilot
+3. Open the report:
+   Open the `index.html` file in the `./coverage-report` directory in your browser.
 
-GitHub is a web-based hosting service for version control. You can learn more about how to use GitHub repositories [here](https://docs.github.com/en/github).
+## API Endpoints
 
-[GitHub Copilot](https://copilot.github.com/) is your AI pair programmer. With GitHub Copilot, you can write code faster with fewer errors.
+### Greeting
 
-## DotNet
+- **GET /api/greeting**
+  - Returns a greeting message.
 
-This project is built with DotNet. If you're new to these technologies, here are some resources to get you started:
+### Game
 
-- [Learn C#](https://dotnet.microsoft.com/en-us/learntocode)
-- [DotNet Documentation](https://learn.microsoft.com/en-us/dotnet/)
+- **POST /api/game**
+  - Saves game data.
+  - Request body: `Game` object.
 
-Happy coding!
+- **GET /api/game/{handle}**
+  - Retrieves game data for a specific player handle.
+
+### Leaderboard
+
+- **POST /api/leaderboard**
+  - Saves a leaderboard entry.
+  - Request body: `Leaderboard` object.
+
+- **GET /api/leaderboard**
+  - Retrieves the top 10 players in the leaderboard.
+
+## Project Structure
+
+memory-game-api/ ├── app/ │   ├── Controllers/ │   │   └── RoutesController.cs │   ├── Models/ │   │   ├── Game.cs │   │   ├── Leaderboard.cs │   │   └── Card.cs │   ├── Services/ │   │   └── GameData.cs │   └── app.csproj ├── app.Tests/ │   ├── RoutesControllerTests.cs │   └── app.Tests.csproj ├── README.md └── .gitignore
+
+
+## Contributing
+
+Contributions are welcome! Please open an issue or submit a pull request for any changes.
+
+## License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
+## Explanation:
+•	Features: Lists the main features of the project.
+•	Getting Started: Provides instructions for setting up the project.
+•	Running the Tests: Explains how to run the unit tests.
+•	Generating Code Coverage Report: Provides steps to generate a code coverage report.
+•	API Endpoints: Describes the available API endpoints.
+•	Project Structure: Shows the structure of the project.
+•	Contributing: Encourages contributions and provides guidelines.
+•	License: Specifies the license for the project.
+This README.md file should provide a comprehensive overview of your project and help others get started with it.
