@@ -1,0 +1,23 @@
+{
+    "handle": "flipwizard",
+    "turns_taken": 12,
+    "time_taken": 180,
+    "cards": [
+        {
+            "type": "1",
+            "flipped": false
+        },
+        {
+            "type": "2",
+            "flipped": false
+        },
+        {
+            "type": "1",
+            "flipped": false
+        },
+        {
+            "type": "2",
+            "flipped": false
+        }
+    ]
+}

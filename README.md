@@ -1,3 +1,9 @@
+# SQL version of memory game workshop
+
+Start by moving prompts folder out of the project to prevent copilot from getting context from those files.
+
+Open chat-prompts.md in another editor to keep it out of copilot context. Follow instructions there.
+
 # Memory Game
 
 Welcome to our Memory Game challenge! This is an application written with C#. We're excited to see how you can enhance it during the event.

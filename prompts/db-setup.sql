@@ -1,0 +1,25 @@
+
+CREATE TABLE Cards (
+    Id INT PRIMARY KEY AUTO_INCREMENT,
+    Type VARCHAR(255) NOT NULL,
+    Flipped BOOLEAN NOT NULL
+);
+CREATE TABLE Leaderboard (
+    Id INT PRIMARY KEY AUTO_INCREMENT,
+    Handle VARCHAR(255) NOT NULL,
+    Score INT NOT NULL,
+    LastPlayed DATETIME NOT NULL
+);
+CREATE TABLE Games (
+    Id INT PRIMARY KEY AUTO_INCREMENT,
+    Handle VARCHAR(255) NOT NULL,
+    TurnsTaken INT NOT NULL,
+    TimeTaken INT NOT NULL
+);
+CREATE TABLE GameCards (
+    GameId INT,
+    CardId INT,
+    PRIMARY KEY (GameId, CardId),
+    FOREIGN KEY (GameId) REFERENCES Games(Id),
+    FOREIGN KEY (CardId) REFERENCES Cards(Id)
+);
