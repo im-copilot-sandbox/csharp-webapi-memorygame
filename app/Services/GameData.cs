@@ -33,20 +33,37 @@ namespace app.Services
 {
     public class GameData
     {
-
         public static async Task SaveGameAsync(Game game, string handle)
         {
-            string filePath = $"data/{handle}.json";
+            string sanitizedHandle = SanitizeHandle(handle);
+            string filePath = Path.Combine("data", sanitizedHandle + ".json");
+            if (!IsPathWithinDirectory(filePath, "data")) throw new InvalidOperationException("Invalid file path.");
+
             var jsonString = JsonSerializer.Serialize(game);
             await File.WriteAllTextAsync(filePath, jsonString);
         }
 
         public static async Task<Game?> RetrieveGameAsync(string handle)
         {
-            string filePath = $"data/{handle}.json";
-            if (!File.Exists(filePath)) return null;
+            string sanitizedHandle = SanitizeHandle(handle);
+            string filePath = Path.Combine("data", sanitizedHandle + ".json");
+            if (!File.Exists(filePath) || !IsPathWithinDirectory(filePath, "data")) return null;
+
             var jsonString = await File.ReadAllTextAsync(filePath);
             return JsonSerializer.Deserialize<Game>(jsonString);
+        }
+
+        private static string SanitizeHandle(string handle)
+        {
+            // Implement sanitization logic here, removing or encoding dangerous characters
+            return handle.Replace("../", "").Replace("..\\", "");
+        }
+
+        private static bool IsPathWithinDirectory(string filePath, string directory)
+        {
+            var fullPath = Path.GetFullPath(filePath);
+            var directoryPath = Path.GetFullPath(directory);
+            return fullPath.StartsWith(directoryPath, StringComparison.OrdinalIgnoreCase);
         }
 
         public static async Task SaveLeaderboardEntryAsync(string handle, int score)
