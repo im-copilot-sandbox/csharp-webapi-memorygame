@@ -1,0 +1,23 @@
+{
+    "handle": "speedracer",
+    "turns_taken": 15,
+    "time_taken": 210,
+    "cards": [
+        {
+            "type": "1",
+            "flipped": false
+        },
+        {
+            "type": "2",
+            "flipped": true
+        },
+        {
+            "type": "1",
+            "flipped": false
+        },
+        {
+            "type": "2",
+            "flipped": true
+        }
+    ]
+}

@@ -1,0 +1,23 @@
+{
+    "handle": "memorymaven",
+    "turns_taken": 10,
+    "time_taken": 150,
+    "cards": [
+        {
+            "type": "1",
+            "flipped": true
+        },
+        {
+            "type": "2",
+            "flipped": false
+        },
+        {
+            "type": "1",
+            "flipped": true
+        },
+        {
+            "type": "2",
+            "flipped": false
+        }
+    ]
+}

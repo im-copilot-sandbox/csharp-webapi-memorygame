@@ -95,3 +95,27 @@ ORDER BY Type ASC;
 -- select all games with more than 10 turns taken
 SELECT * FROM Games WHERE TurnsTaken > 10;
 
+-- create an idex on the games table for the column Handle
+CREATE INDEX HandleIndex ON Games (Handle);
+
+-- create an index on the cards table for the column Type  
+CREATE INDEX TypeIndex ON Cards (Type);
+
+-- create an index on the gamecards table for the column GameId
+CREATE INDEX GameIdIndex ON GameCards (GameId);
+
+-- create an index on the leaderboard table for the column Handle and order by LastPlayed in descending order
+CREATE INDEX HandleLastPlayedIndex ON Leaderboard (Handle, LastPlayed DESC);
+
+-- create a trigger that updates the last played date when a new score is inserted
+DELIMITER //
+CREATE TRIGGER UpdateLastPlayed
+BEFORE INSERT ON Leaderboard
+FOR EACH ROW
+BEGIN
+    SET NEW.LastPlayed = NOW();
+END //
+DELIMITER ; 
+
+-- insert a new score into the leaderboard table
+INSERT INTO Leaderboard (Handle, Score) VALUES ('newplayer', 500);
