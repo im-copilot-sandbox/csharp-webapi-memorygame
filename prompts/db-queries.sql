@@ -1,5 +1,5 @@
 -- Select all data from the leaderboard table ordered by score in descending order
--- SELECT * FROM Leaderboard ORDER BY Score DESC;
+ SELECT * FROM Leaderboard ORDER BY Score DESC;
 
 -- Select all data from the leaderboard table ordered by last played in ascending order
 SELECT * FROM Leaderboard ORDER BY LastPlayed ASC;
@@ -20,6 +20,11 @@ SELECT * FROM Leaderboard WHERE LastPlayed > '2024-06-17T18:34:15.480172' AND Sc
 CREATE VIEW TopScores AS
 SELECT * FROM Leaderboard ORDER BY Score DESC LIMIT 5;
 
+
+-- if necessary
+-- please recreate those views without the ORDER BY clause, as it is not allowed in views 
+
+
 CREATE VIEW RecentScores AS
 SELECT * FROM Leaderboard ORDER BY LastPlayed ASC;
 
@@ -34,7 +39,12 @@ FOR EACH ROW
 BEGIN
     SET NEW.LastPlayed = NOW();
 END //
+
+
 DELIMITER ;
+
+
+
 
 -- insert a new score into the leaderboard table
 INSERT INTO Leaderboard (Handle, Score) VALUES ('newplayer', 500);
@@ -42,27 +52,64 @@ INSERT INTO Leaderboard (Handle, Score) VALUES ('newplayer', 500);
 -- select all data from the leaderboard table to verify the trigger worked
 SELECT * FROM Leaderboard;
 
+
+
+-- insert a new score into the leaderboard table without specifying the last played date
+INSERT INTO Leaderboard (Handle, Score)
+VALUES ('NewPlayer', 1000);
+
+-- update the score of an existing player in the leaderboard table without specifying the last played date
+UPDATE Leaderboard
+SET Score = 1500
+WHERE Handle = 'NewPlayer';
+
+--if fails
+-- Make LastPlayed accept nulls and run again
+
+
 -- create a stored procedure for the insert above
-DELIMITER //
-CREATE PROCEDURE InsertScore(IN newHandle VARCHAR(255), IN newScore INT)
+CREATE PROCEDURE InsertScore
+    @Handle NVARCHAR(100),
+    @Score INT
+AS
 BEGIN
-    INSERT INTO Leaderboard (Handle, Score) VALUES (newHandle, newScore);
-END //
-DELIMITER ;
+    INSERT INTO Leaderboard (Handle, Score)
+    VALUES (@Handle, @Score);
+END;
 
--- make the procedure above return the id of the inserted row
-DELIMITER //
-CREATE PROCEDURE InsertScore(IN newHandle VARCHAR(255), IN newScore INT, OUT newId INT)
+-- create a stored procedure for the update above
+CREATE PROCEDURE UpdateScore
+    @Handle NVARCHAR(100),
+    @Score INT
+AS
 BEGIN
-    INSERT INTO Leaderboard (Handle, Score) VALUES (newHandle, newScore);
-    SET newId = LAST_INSERT_ID();
-END //
-DELIMITER ;
+    UPDATE Leaderboard
+    SET Score = @Score
+    WHERE Handle = @Handle;
+END;
 
--- call the procedure above and store the result in a variable
-SET @newId = 0;
-CALL InsertScore('newplayer2', 600, @newId);
-SELECT @newId;
+
+-- alter the procedure above return the id of the inserted row
+ALTER PROCEDURE InsertScore
+    @Handle NVARCHAR(100),
+    @Score INT
+AS
+BEGIN
+    INSERT INTO Leaderboard (Handle, Score)
+    VALUES (@Handle, @Score);
+
+    SELECT SCOPE_IDENTITY() AS LeaderboardId;
+END;
+
+
+-- call the InsertScore procedure above
+EXEC InsertScore 'NewPlayer', 1000;
+
+-- store the result of InsertScore in a variable and select it
+DECLARE @NewLeaderboardId INT;
+EXEC @NewLeaderboardId = InsertScore 'NewPlayer', 1000;
+SELECT @NewLeaderboardId AS LeaderboardId;
+
 
 
 -- select the average score from the leaderboard table
@@ -78,9 +125,6 @@ SELECT * FROM Cards WHERE Flipped = TRUE;
 -- select all cards
 SELECT * FROM Cards;
 
-
--- select all cards that are flipped
-SELECT * FROM Cards WHERE Flipped = TRUE;
 
 -- select all games
 SELECT * FROM Games;
@@ -107,15 +151,4 @@ CREATE INDEX GameIdIndex ON GameCards (GameId);
 -- create an index on the leaderboard table for the column Handle and order by LastPlayed in descending order
 CREATE INDEX HandleLastPlayedIndex ON Leaderboard (Handle, LastPlayed DESC);
 
--- create a trigger that updates the last played date when a new score is inserted
-DELIMITER //
-CREATE TRIGGER UpdateLastPlayed
-BEFORE INSERT ON Leaderboard
-FOR EACH ROW
-BEGIN
-    SET NEW.LastPlayed = NOW();
-END //
-DELIMITER ; 
 
--- insert a new score into the leaderboard table
-INSERT INTO Leaderboard (Handle, Score) VALUES ('newplayer', 500);

@@ -1,14 +1,26 @@
+
+
 We will also integrate the more conceptual points that are in prompts/database-development-mastery.md. And will improve on that.
 
 Also need to add more db-queries for sql performance optimization. Create some bad queries that can be optimized.
+## Prompt 0
+
+Create a microsoft sql server database MemoryGame for this application.
+
+## Answer 0
+```CREATE DATABASE MemoryGame;
+GO
+```
 
 ## Prompt 1
 
-Generate SQL DDL scripts mapping the properties of Card, Game and Leaderboard classes. For the Game class, create another table with one to many mapping from Cards property to the related table for card class. 
+(attach files)
+
+Generate SQL DDL scripts mapping the properties of Card, Game and Leaderboard classes, create db columns for each class property. For the Game class, create another table with one to many mapping from Cards property to the related table for card class. 
 
 ## Answer 1
 
-Based on the provided `Card` and `Game` classes, here are the SQL DDL scripts to create the corresponding tables, including a one-to-many relationship between `Game` and `Card`:
+Based on the provided `Card`, `Game` and `Leaderboard classes, here are the SQL DDL scripts to create the corresponding tables, including a one-to-many relationship between `Game` and `Card` using a mapping table:
 
 ### Card Table
 ```sql
@@ -116,8 +128,8 @@ These scripts create tables with unique identifiers as primary keys with auto-in
 --------
 
 
-create db folder with 2 files: db-setup.sql and db-queries.sql
-copy ddl to db-setup.sql
+create db folder with 3 files: db-setup.sql and db-queries.sql
+copy ddl to db-setup.sql and db-mockdata
 
 -----------
 
