@@ -12,7 +12,7 @@ namespace app.Controllers
         [HttpGet("greeting")]
         public ActionResult<string> Greeting()
         {
-            return Ok("Hello, World!");
+            return Ok("Hello, s");
         }
 
         // POST /game

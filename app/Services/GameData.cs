@@ -66,6 +66,14 @@ namespace app.Services
             return fullPath.StartsWith(directoryPath, StringComparison.OrdinalIgnoreCase);
         }
 
+        /// <summary>
+        /// Saves a leaderboard entry asynchronously.
+        /// If an entry with the same handle exists, it updates the score and last played date.
+        /// Otherwise, it adds a new entry to the leaderboard.
+        /// </summary>
+        /// <param name="handle">The handle of the player.</param>
+        /// <param name="score">The score of the player.</param>
+        /// <returns>A task representing the asynchronous operation.</returns>
         public static async Task SaveLeaderboardEntryAsync(string handle, int score)
         {
             const string leaderboardFile = $"data/leaderboard.json";
