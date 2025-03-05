@@ -33,7 +33,7 @@ handle.json
 
 namespace app.Services
 {
-    public class GameData
+    public class GameData 
     {
         private readonly MemoryGameContext _context;
 
@@ -42,39 +42,71 @@ namespace app.Services
             _context = context;
         }
 
-        public async Task SaveGameAsync(Game game)
+        public async Task<List<Game>> GetGamesAsync()
         {
-            var existingGame = await _context.Games.Include(g => g.Cards).FirstOrDefaultAsync(g => g.Handle == game.Handle);
-            if (existingGame != null)
-            {
-                _context.Games.Remove(existingGame);
-            }
+            return await _context.Games.Include(g => g.Cards).ToListAsync();
+        }
 
+        public async Task<Game> GetGameByIdAsync(int id)
+        {
+            var game = await _context.Games.Include(g => g.Cards).FirstOrDefaultAsync(g => g.GameId == id);
+            if (game == null)
+            {
+                throw new InvalidOperationException($"Game with ID {id} not found.");
+            }
+            return game;
+        }
+
+        public async Task AddGameAsync(Game game)
+        {
             _context.Games.Add(game);
             await _context.SaveChangesAsync();
         }
 
-        public async Task<Game?> RetrieveGameAsync(string handle)
+        public async Task UpdateGameAsync(Game game)
         {
-            return await _context.Games.Include(g => g.Cards).FirstOrDefaultAsync(g => g.Handle == handle);
+            _context.Games.Update(game);
+            await _context.SaveChangesAsync();
         }
 
-        public async Task SaveLeaderboardEntryAsync(string handle, int score)
+        public async Task DeleteGameAsync(int id)
         {
-            var entry = await _context.Leaderboard.FirstOrDefaultAsync(e => e.Handle == handle);
+            var game = await _context.Games.FindAsync(id);
+            if (game != null)
+            {
+                _context.Games.Remove(game);
+                await _context.SaveChangesAsync();
+            }
+        }
+
+        public static async Task SaveLeaderboardEntryAsync(string handle, int score)
+        {
+            const string leaderboardFile = $"data/leaderboard.json";
+            List<Leaderboard> leaderboard;
+            if (File.Exists(leaderboardFile))
+            {
+                string leaderboardContent = await File.ReadAllTextAsync(leaderboardFile);
+                leaderboard = JsonSerializer.Deserialize<List<Leaderboard>>(leaderboardContent) ?? new List<Leaderboard>();
+            }
+            else
+            {
+                leaderboard = new List<Leaderboard>();
+            }
+
+            var entry = leaderboard.FirstOrDefault(e => e.Handle == handle);
             if (entry != null)
             {
-                entry = new Leaderboard
+                leaderboard.Remove(entry);
+                leaderboard.Add(new Leaderboard
                 {
                     Handle = handle,
                     Score = score,
                     LastPlayed = DateTime.UtcNow
-                };
-                _context.Leaderboard.Update(entry);
+                });
             }
             else
             {
-                _context.Leaderboard.Add(new Leaderboard
+                leaderboard.Add(new Leaderboard
                 {
                     Handle = handle,
                     Score = score,
@@ -82,12 +114,15 @@ namespace app.Services
                 });
             }
 
-            await _context.SaveChangesAsync();
+            string updatedContent = JsonSerializer.Serialize(leaderboard, new JsonSerializerOptions { WriteIndented = true });
+            await File.WriteAllTextAsync(leaderboardFile, updatedContent);
         }
-
-        public async Task<List<Leaderboard>> RetrieveLeaderboardAsync()
+        public static async Task<List<Leaderboard>> RetrieveLeaderboardAsync()
         {
-            return await _context.Leaderboard.OrderByDescending(l => l.Score).ToListAsync();
+            const string leaderboardFile = $"data/leaderboard.json";
+            if (!File.Exists(leaderboardFile)) return new List<Leaderboard>();
+            var jsonString = await File.ReadAllTextAsync(leaderboardFile);
+            return JsonSerializer.Deserialize<List<Leaderboard>>(jsonString) ?? new List<Leaderboard>();
         }
     }
 }

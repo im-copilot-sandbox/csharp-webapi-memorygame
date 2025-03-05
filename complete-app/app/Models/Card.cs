@@ -12,5 +12,7 @@ namespace app.Models
         // Gets or sets a value indicating whether the card is hidden or flipped.
         [JsonPropertyName("flipped")]
         public required Boolean Flipped { get; set; }
+
+
     }
 }

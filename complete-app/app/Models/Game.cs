@@ -2,18 +2,23 @@ using System.Text.Json.Serialization;
 
 namespace app.Models
 {
-    public record Game
+    public class Game
     {
         [JsonPropertyName("handle")]
-        public required string Handle { get; init; }
+        public required string Handle { get; set; }
 
         [JsonPropertyName("turns_taken")]
-        public int TurnsTaken { get; init; }
+        public int TurnsTaken { get; set; }
 
         [JsonPropertyName("time_taken")]
-        public int TimeTaken { get; init; }
+        public int TimeTaken { get; set; }
 
         [JsonPropertyName("cards")]
-        public List<Card> Cards { get; init; } = new();
+        public List<Card> Cards { get; set; } = new();
+
+        public int GameId { get; set; }
+
+        public ICollection<GameCard> GameCards { get; set; } = [];
+
     }
 }

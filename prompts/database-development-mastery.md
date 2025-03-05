@@ -958,4 +958,32 @@ Open db-queries.sql
 ```-- create an index on the leaderboard table for the column Handle and order by LastPlayed in descending order
 ```
 
+```
+-- create an index on the leaderboard table for the column Score
+```
+```
+-- create an index on the leaderboard table for the column LastPlayed
+```
+```
+-- create an index on the leaderboard table for the column LastPlayed and order by Score in descending order
+```
+```
+-- create an index on the leaderboard table for the column LastPlayed and order by Handle in ascending order
+```
+
 ## Module 7: Using copilot to implement Entity Framework
+
+At copilot chat:
+```
+based on the database defined at db/db-setup.sql modify Services/GameData.cs to use the database instead of current json files. Use Entity Framework Core.
+```
+
+Copilot will provide several steps to setup install and use entity framework. Follow the steps, or select the appropriate files and click for copilot to do it.
+
+In one of the test runs I got a The EF Context class being created on the root folder instead of app folder, so I needed to move it.
+
+Also, in another pass there was a reference to a missing property, clicking on "Fix using copilot" resolved it (but I needed to manually copy the code as it was not able to apply in another file). I needed to do it with different properties. In most instances it fixed it, in a couple I was able to fix with the information it provided.
+
+
+
+
