@@ -985,5 +985,25 @@ In one of the test runs I got a The EF Context class being created on the root f
 Also, in another pass there was a reference to a missing property, clicking on "Fix using copilot" resolved it (but I needed to manually copy the code as it was not able to apply in another file). I needed to do it with different properties. In most instances it fixed it, in a couple I was able to fix with the information it provided.
 
 
+## Module 8: Using copilot with NoSQL
 
+Make sure you have mongodb setup on the environment
 
+At chat, make sure to attach the entire app as context and type:
+```
+migrate this app to use mongodb instead of sql server
+```
+
+There will be a lot of steps, I was able to have a copilot open all the files and do the edits, except for the models where it provided one example change that needed to be replicated (I did manually in 4 files), I fixed a few issues with "Fix using copilot" menu.
+
+In my case I wanted more details in one of the steps: 
+```
+can you detail what to do for step 7: Update Controllers: Update your controllers to use the new service methods. Using existing RoutesController.
+```
+
+It referenced an unexistent class, LeaderboardData, I asked:
+```
+LeaderboardData doesn't exist, create for me.
+```
+
+After that app is running on MongoDB
