@@ -1,67 +1,75 @@
-using Microsoft.AspNetCore.Mvc;
 using Xunit;
+using Moq;
+using Microsoft.Extensions.Logging;
 using app.Controllers;
 using app.Models;
+using app.Services;
+using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using System.Collections.Generic;
 
 namespace app.Tests
 {
     public class RoutesControllerTests
     {
-        [Fact]
-        public void Greeting_ReturnsHelloWorld()
+        private readonly Mock<ILogger<RoutesController>> _mockLogger;
+        private readonly RoutesController _controller;
+
+        public RoutesControllerTests()
         {
-            // Arrange
-            var controller = new RoutesController();
+            _mockLogger = new Mock<ILogger<RoutesController>>();
+            _controller = new RoutesController(_mockLogger.Object);
+        }
 
-            // Act
-            var result = controller.Greeting();
-
-            // Assert
+        [Fact]
+        public void Greeting_ReturnsOkResult()
+        {
+            var result = _controller.Greeting();
             var okResult = Assert.IsType<OkObjectResult>(result.Result);
-            Assert.Equal("Hello, s", okResult.Value);
+            Assert.Equal("Hello, csharp", okResult.Value);
         }
 
         [Fact]
-        public async Task PostGame_ReturnsBadRequest_WhenGameIsNull()
+        public async Task PostGame_InvalidModel_ReturnsBadRequest()
         {
-            // Arrange
-            var controller = new RoutesController();
+            _controller.ModelState.AddModelError("Handle", "Required");
 
-            // Act
-            var result = await controller.PostGame(null);
+            var game = new Game
+            {
+                Handle = "test_handle"
+            };
+            var result = await _controller.PostGame(game);
 
-            // Assert
             Assert.IsType<BadRequestObjectResult>(result);
         }
 
         [Fact]
-        public async Task GetGame_ReturnsBadRequest_WhenHandleIsInvalid()
+        public async Task GetGame_EmptyHandle_ReturnsBadRequest()
         {
-            // Arrange
-            var controller = new RoutesController();
+            var result = await _controller.GetGame(string.Empty);
 
-            // Act
-            var result = await controller.GetGame("");
-
-            // Assert
             Assert.IsType<BadRequestObjectResult>(result);
         }
 
         [Fact]
-        public async Task PostLeaderboard_ReturnsBadRequest_WhenEntryIsInvalid()
+        public async Task PostLeaderboard_InvalidModel_ReturnsBadRequest()
         {
-            // Arrange
-            var controller = new RoutesController();
-            var entry = new RoutesController.LeaderboardEntry { Handle = "", Score = 0 };
+            _controller.ModelState.AddModelError("Handle", "Required");
 
-            // Act
-            var result = await controller.PostLeaderboard(entry);
+            var entry = new Leaderboard
+            {
+                Handle = "test_handle"
+            };
+            var result = await _controller.PostLeaderboard(entry);
 
-            // Assert
             Assert.IsType<BadRequestObjectResult>(result);
+        }
+
+        [Fact]
+        public async Task GetLeaderboard_ReturnsOkResult()
+        {
+            var result = await _controller.GetLeaderboard();
+            Assert.IsType<OkObjectResult>(result);
         }
     }
 }

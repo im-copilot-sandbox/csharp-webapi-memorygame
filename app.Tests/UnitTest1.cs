@@ -1,28 +1,13 @@
-﻿namespace app.Tests;
+﻿using Xunit;
 
-public class UnitTest1
+namespace app.Tests
 {
-    [Fact]
-    public void Test1()
+    public class UnitTest1
     {
-        // Arrange
-        int expected = 5;
-        int actual = 2 + 3;
-
-        // Act & Assert
-        Assert.Equal(expected, actual);
-    }
-
-    [Theory]
-    [InlineData(1, 1, 2)]
-    [InlineData(2, 2, 4)]
-    [InlineData(3, 3, 6)]
-    public void TestAddition(int a, int b, int expected)
-    {
-        // Act
-        int actual = a + b;
-
-        // Assert
-        Assert.Equal(expected, actual);
+        [Fact]
+        public void Test1()
+        {
+            Assert.True(true);
+        }
     }
 }
