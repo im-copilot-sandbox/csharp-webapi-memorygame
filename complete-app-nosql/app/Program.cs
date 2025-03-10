@@ -10,8 +10,16 @@ builder.Services.Configure<MongoDbContext>(builder.Configuration);
 builder.Services.AddSingleton<MongoDbContext>();
 builder.Services.AddScoped<GameData>();
 builder.Services.AddScoped<LeaderboardData>();
+builder.Services.AddScoped<SeedData>();
 
 var app = builder.Build();
+
+// Seed the database
+using (var scope = app.Services.CreateScope())
+{
+    var seedData = scope.ServiceProvider.GetRequiredService<SeedData>();
+    await seedData.SeedAsync();
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

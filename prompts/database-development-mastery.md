@@ -892,11 +892,6 @@ Open db-queries.sql
 
 ```
 
-(in case it fails to create)
-```
--- please recreate those views without the ORDER BY clause, as it is not allowed in views
-
-```
 
 ```
 -- create a trigger that updates the last played date when a new score is inserted
@@ -1007,3 +1002,194 @@ LeaderboardData doesn't exist, create for me.
 ```
 
 After that app is running on MongoDB
+
+```
+Create a new file inserting 200 records on MongoDB for Cards, Games, Leaderboards. Do it using the MongoDBCollection.
+```
+
+Open the create file. add new method and start coding with comments:
+ 
+``` 
+            // Select all data from the leaderboard table ordered by score in descending order
+```
+
+```
+            // Select all data from the leaderboard ordered by last played in ascending order
+```
+
+```
+            // Select all data from the leaderboard ordered by score in descending order and last played in ascending order
+```
+
+
+```
+            // Select all data from the leaderboard where the score is greater than 500
+```
+
+
+```
+            // Select all data from the leaderboard where the score is greater than 500 and the last played date is greater than or equal to 2020-01-01
+```
+
+
+```
+            // Select the top 10 data from the leaderboard ordered by score in descending order
+```
+
+
+```
+            // Select the top 5 scores from the leaderboard that were played after a specific date
+
+```
+
+
+```
+            // Select the top 5 scores from the leaderboard that were played before a specific date
+```
+
+
+```
+            // Select the top 5 scores from the leaderboard that were played after a specific date and have a score greater than a specific value
+```
+
+
+```
+            // Select the top 5 scores from the leaderboard that were played before a specific date and have a score greater than a specific value
+```
+
+
+```
+            //Select the top 5 scores from the leaderboard that were played after a specific date and have a score greater than a specific value, ordered by last played date in ascending order
+```
+
+
+```
+            // insert a new score into the leaderboard without specifying the last played date
+```
+
+
+```
+            // insert a new score into the leaderboard with a specific last played date
+```
+
+
+```
+            // update the score of an existing entry in the leaderboard
+```
+
+
+```
+            // update the last played date of an existing entry in the leaderboard
+```
+
+```
+            // delete an entry from the leaderboard
+```
+
+```
+            // delete all entries from the leaderboard
+```
+
+```
+            // delete all entries from the leaderboard where the score is less than 500
+```
+
+```
+            // delete all entries from the leaderboard where the last played date is before a specific date
+```
+
+```
+            // select the average score from the leaderboard
+```
+
+```
+            // select the average score from the leaderboard for entries with a score greater than 500    
+```
+
+```
+            // select all cards
+```
+
+```
+            // select all games
+```
+
+```
+            // select all cards that are flipped
+```
+
+```
+            // select all cards for a specific game
+```
+
+```
+            // select all games for a specific player
+```
+
+```
+            // select all data from the Cards and order by type in ascending order
+```
+
+```
+            // select all games with more than 10 turns taken
+```
+
+```
+            // create an index on the games for the field Handle
+```
+
+```
+            // create a compound index on the games for the fields Handle and TurnsTaken
+```
+
+```
+            // create a unique index on the games for the field Handle
+```
+
+```
+            // create a text index on the games for the field Handle
+```
+
+```
+            // create a hashed index on the games for the field Handle
+```
+
+```
+            // create a sparse index on the games for the field Handle
+```
+
+```
+            // create an index on the cards for the field Id
+```
+
+```
+            // create a unique index on the cards for the field Id
+```
+
+```
+            // create a compound index on the cards for the fields Id and Flipped
+```
+
+```
+            // create an index for cards  field Type in ascending order
+```
+
+```
+            // create an index on the leaderboard for Handle and order by LastPlayed in descending order
+```
+
+```
+            // create an index on the leaderboard for Score in descending order
+```
+
+```
+            // create an index on the leaderboard for LastPlayed
+```
+
+```
+            // create an index for leaderboard for LastPlayed and order by Score in descending order
+```
+
+```
+            // create an index for leaderboard for  LastPlayed and order by Handle in ascending order
+```

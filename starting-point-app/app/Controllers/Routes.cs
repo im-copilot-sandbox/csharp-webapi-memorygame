@@ -8,15 +8,6 @@ namespace app.Controllers
     [Route("")]
     public class RoutesController : ControllerBase
     {
-        private readonly GameData _gameData;
-        private readonly LeaderboardData _leaderboardData;
-
-        public RoutesController(GameData gameData, LeaderboardData leaderboardData)
-        {
-            _gameData = gameData;
-            _leaderboardData = leaderboardData;
-        }
-
         // Route to fetch data from the JSON file
         [HttpGet("greeting")]
         public ActionResult<string> Greeting()
@@ -26,38 +17,47 @@ namespace app.Controllers
 
         // POST /game
         [HttpPost("game")]
-        public async Task<ActionResult> PostGame([FromBody] Game game)
+        public ActionResult<string> PostGame([FromBody] Game game)
         {
-            await _gameData.CreateGameAsync(game);
-            return CreatedAtAction(nameof(GetGame), new { handle = game.Handle }, game);
+            // TODO: Save the following in a JSON file
+            // named with the player handle
+            // - name under the handle
+            // - # of turns
+            // - time taken
+            // - time left
+            // - number of cards and their position
+            // - which ones flipped vs. hidden
+            return Ok();
         }
 
         // GET /game/handle
         [HttpGet("game/{handle}")]
-        public async Task<ActionResult<Game>> GetGame(string handle)
+        public ActionResult<string> GetGame(string handle)
         {
-            var game = await _gameData.GetGameAsync(handle);
-            if (game == null)
-            {
-                return NotFound();
-            }
-            return Ok(game);
+            // TODO: Retrieve info about the game stored via POST /game
+            return Ok();
         }
 
         // POST /leaderboard
         [HttpPost("leaderboard")]
-        public async Task<ActionResult> PostLeaderboard([FromBody] Leaderboard entry)
+        public ActionResult<string> PostLeaderboard([FromBody] Leaderboard entry)
         {
-            await _leaderboardData.CreateLeaderboardEntryAsync(entry);
-            return CreatedAtAction(nameof(GetLeaderboard), new { id = entry.Id }, entry);
+            // TODO: Save the following
+            // - player handle
+            // - score
+            // - date/time last played
+            return Ok();
         }
 
         // GET /leaderboard
         [HttpGet("leaderboard")]
-        public async Task<ActionResult<List<Leaderboard>>> GetLeaderboard()
+        public ActionResult<string> GetLeaderboard()
         {
-            var leaderboard = await _leaderboardData.GetTopLeaderboardEntriesAsync();
-            return Ok(leaderboard);
+            // TODO: Retrieve top 10 players in score desc order
+            // - player handle
+            // - score
+            // - date/time last played
+            return Ok();
         }
     }
 }

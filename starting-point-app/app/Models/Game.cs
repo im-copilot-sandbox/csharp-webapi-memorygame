@@ -1,30 +1,19 @@
 using System.Text.Json.Serialization;
-using MongoDB.Bson;
-using MongoDB.Bson.Serialization.Attributes;
 
 namespace app.Models
 {
-    public class Game
+    public record Game
     {
-
-        [BsonId]
-        [BsonRepresentation(BsonType.ObjectId)]
-        public required string Id { get; set; }
         [JsonPropertyName("handle")]
-        public required string Handle { get; set; }
+        public required string Handle { get; init; }
 
         [JsonPropertyName("turns_taken")]
-        public int TurnsTaken { get; set; }
+        public int TurnsTaken { get; init; }
 
         [JsonPropertyName("time_taken")]
-        public int TimeTaken { get; set; }
+        public int TimeTaken { get; init; }
 
         [JsonPropertyName("cards")]
-        public List<Card> Cards { get; set; } = new();
-
-        public int GameId { get; set; }
-
-        public ICollection<GameCard> GameCards { get; set; } = [];
-
+        public List<Card> Cards { get; init; } = new();
     }
 }
