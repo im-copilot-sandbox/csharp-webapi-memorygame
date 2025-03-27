@@ -912,15 +912,20 @@ Open db-queries.sql
 -- update the score of an existing player in the leaderboard table without specifying the last played date
 ```
 
-```-- Make LastPlayed accept nulls
 ```
-```-- create a stored procedure for the insert above
+-- Make LastPlayed accept nulls
 ```
-```-- create a stored procedure for the update above
 ```
-```-- alter the procedure above return the id of the inserted row
+-- create a stored procedure for the insert above
 ```
-```-- alter the procedure above return the id of the updated row
+```
+-- create a stored procedure for the update above
+```
+```
+-- alter the procedure above return the id of the inserted row
+```
+```
+-- alter the procedure above return the id of the updated row
 ```
 
 ```
@@ -935,19 +940,24 @@ Open db-queries.sql
 -- create a function to select the average score from the leaderboard table
 ```
 
-```-- select all cards
+```
+-- select all cards
 ```
 
-```-- select all cards that are flipped
+```
+-- select all cards that are flipped
 ```
 
-```-- select all cards for a specific game, 
+```
+-- select all cards for a specific game, 
 ```
 
-```-- include all data from the Cards table and order by type in ascending order
+```
+-- include all data from the Cards table and order by type in ascending order
 ```
 
-```-- select all games with more than 10 turns taken
+```
+-- select all games with more than 10 turns taken
 ```
 
 ```
