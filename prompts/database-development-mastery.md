@@ -923,45 +923,61 @@ Open db-queries.sql
 ```-- alter the procedure above return the id of the updated row
 ```
 
-```-- call the InsertScore procedure above
+```
+-- call the InsertScore procedure above
 ```
 
-```-- select the average score from the leaderboard table
+```
+-- select the average score from the leaderboard table
 ```
 
-```-- create a function to select the average score from the leaderboard table
+```
+-- create a function to select the average score from the leaderboard table
 ```
 
 ```-- select all cards
 ```
+
 ```-- select all cards that are flipped
 ```
 
 ```-- select all cards for a specific game, 
 ```
+
 ```-- include all data from the Cards table and order by type in ascending order
 ```
 
 ```-- select all games with more than 10 turns taken
 ```
-```-- create an idex on the games table for the column Handle
+
 ```
-```-- create an index on the cards table for the column Type  
+-- create an idex on the games table for the column Handle
 ```
-```-- create an index on the gamecards table for the column GameId
+
 ```
-```-- create an index on the leaderboard table for the column Handle and order by LastPlayed in descending order
+-- create an index on the cards table for the column Type  
+```
+
+```
+-- create an index on the gamecards table for the column GameId
+```
+
+```
+-- create an index on the leaderboard table for the column Handle and order by LastPlayed in descending order
 ```
 
 ```
 -- create an index on the leaderboard table for the column Score
 ```
+
 ```
 -- create an index on the leaderboard table for the column LastPlayed
 ```
+
 ```
 -- create an index on the leaderboard table for the column LastPlayed and order by Score in descending order
 ```
+
 ```
 -- create an index on the leaderboard table for the column LastPlayed and order by Handle in ascending order
 ```
