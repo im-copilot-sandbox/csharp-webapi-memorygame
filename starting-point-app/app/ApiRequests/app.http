@@ -1,0 +1,60 @@
+@api_HostAddress = http://localhost:5226
+
+GET {{api_HostAddress}}/greeting
+
+###
+
+
+POST {{api_HostAddress}}/game 
+Content-Type: application/json
+
+{
+    "handle": "test",
+    "turns_taken": 12,
+    "time_taken": 180,
+    "cards": [
+        {
+            "type": "1",
+            "flipped": false
+        },
+        {
+            "type": "2",
+            "flipped": false
+        },
+        {
+            "type": "1",
+            "flipped": false
+        },
+        {
+            "type": "2",
+            "flipped": false
+        }
+    ]
+}
+
+###
+
+
+GET {{api_HostAddress}}/game/test
+
+
+###
+
+
+POST {{api_HostAddress}}/leaderboard
+Content-Type: application/json
+
+{
+    "handle": "test",
+    "score": 100,
+    "last_played": "2024-06-17T18:34:15.480172"
+}
+
+###
+
+
+GET {{api_HostAddress}}/leaderboard
+
+
+###
+
